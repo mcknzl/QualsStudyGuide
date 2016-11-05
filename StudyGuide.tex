@@ -949,12 +949,83 @@ That is, minimization of the sum of chemical potentials is a general requirement
 $$d\eta = \frac{dn_i}{\nu_i}$$
 $$\nu_{H_2} = -1,\ \nu_{Cl_2} = -1,\ \nu_{HCl} = +2$$ 
 $$\sum\mu_idn_i=\sum\mu_i(\nu_id\eta)=d\eta\left(\sum\mu_i\nu_i\right)\leq0$$
-By convention $\eta\in[0,1]$ (i.e. $\eta=0$ if the composition is entirely RHS compounds and $\eta=1$ ifthe composition is entirely LHS compounds) so we require $\sum\mu_i\nu_i\leq0$. Therefore, if $\sum\mu_i\nu_i<0$ then the reaction will proceed from left to right (i.e. more of the positive $\nu$ compounds will be formed). Otherwise, if $\sum\mu_i\nu_i>0$ then the reaction will proceed form right to left (i.e. more of the negative $\nu$ compounds will be formed). Finally, if $\sum\mu_i\nu_i=0$ then equilibrium has been achieved (i.e. neither positive nor negaitve $\nu$ compounds are favored).
+By convention $\eta\in[0,1]$ (i.e. $\eta=0$ if the composition is entirely LHS compounds and $\eta=1$ ifthe composition is entirely RHS compounds) so we require $\sum\mu_i\nu_i\leq0$. Therefore, if $\sum\mu_i\nu_i<0$ then the reaction will proceed from left to right (i.e. more of the positive $\nu$ compounds will be formed). Otherwise, if $\sum\mu_i\nu_i>0$ then the reaction will proceed form right to left (i.e. more of the negative $\nu$ compounds will be formed). Finally, if $\sum\mu_i\nu_i=0$ then equilibrium has been achieved (i.e. neither positive nor negaitve $\nu$ compounds are favored).
 
 \subsubsection{Maxwell's Relations}
+Maxwell's relations derive from the state postulate and the rules of exact differentials. Take, for example, the internal energy of a system
+$$U = U(S,V)$$
+$$dU = \PartialConst{U}{S}{V}dS + \PartialConst{U}{V}{S}dS$$
+$$dU = TdS - pdV$$
+then the second derivative rule for exact differentials requires
+$$\PartialConst{T}{V}{S} = -\PartialConst{p}{S}{V}$$
+We can perform similar operations on the enthalpy, Helmholtz free energy, and Gibbs free energy and arrive a similar results (these all assume $dn_i=0$)
+$$dH = dU + d(pV) = TdS + Vdp \implies \PartialConst{T}{p}{S} = \PartialConst{V}{S}{p}$$
+$$dF = dU - d(ST) = -SdT - pdV \implies \PartialConst{S}{V}{T} = \PartialConst{p}{T}{V}$$
+$$dG = dH - d(TS) = -SdT + Vdp \implies -\PartialConst{S}{p}{T} = \PartialConst{V}{T}{p}$$
 
-\subsubsection{Perfect Gases}
-\subsubsection{Reaction Equilibria}
+\subsubsection{Specific Heats}
+We define the specific heats for a substance of known composition as follows:
+$$dU = \PartialConst{U}{T}{V}dT + \PartialConst{U}{V}{T}dV$$
+$$C_v = \PartialConst{U}{T}{V}$$
+
+$$dH = \PartialConst{H}{T}{p}dT + \PartialConst{H}{p}{T}dp$$
+$$C_p = \PartialConst{H}{T}{p}$$
+
+Physically, these parameters specific how much heat must be added to the substance in order to increase its temperature by $dT$. Furthermore, using Maxwell's relations we can show
+$$C_v = T\PartialConst{S}{T}{V},\quad C_p = T\PartialConst{S}{T}{p}$$
+
+The units of the specific heats are energy per unit mass per unit change in temperature
+$$C_x \equiv \mathrm{BTU/lbm \degree F} = \mathrm{cal/gK} = 4.187\ \mathrm{J/gK}$$
+
+\subsubsection{Compressibility}
+Compressibility cofficients are defined by expressing the volume of a substance as a function of its temperature and pressure
+$$V= V(T,p)\implies dV = \PartialConst{V}{T}{p}dT + \PartialConst{V}{p}{T}dp$$
+from which we deduce the isobaric and isothermal compressiblity coefficients
+$$\alpha = \frac{1}{V}\PartialConst{V}{T}{p} = \frac{1}{T}\ \textrm{for an ideal gas}$$
+$$\kappa = \frac{-1}{V}\PartialConst{V}{p}{T} = \frac{1}{p}\ \textrm{for an ideal gas}$$
+where the division by volume means the compressibility coefficients correspond to fractional changes in volume per unit pressure or temperature. That is, $dV/V$ is something like a relative change in volume. We also have the isentropic compressibility
+$$\beta=\frac{-1}{V}\PartialConst{V}{p}{S}$$
+
+Note the negative signs, which indicate whether volume increases or decreases with an increase in the free variable (i.e. volumes tend to increase with temperature and decreasse with pressure).
+
+Some interesting games can be played with the compressibility coefficients. First, note that the second derivative rule (reciprocity rule) for exact differentials applies, and thus requires
+$$\PartialConst{\alpha}{p}{T} = -\PartialConst{\kappa}{T}{p}$$
+Second, substituting the coefficients into the expression for volume, rearranging and integrating yields
+$$\ln\left(\frac{V_2}{V_1}\right) = \alpha\Delta T - \kappa\Delta p$$
+Third, from the cyclic rule, we have
+$$\PartialConst{p}{T}{V}\PartialConst{T}{V}{p}\PartialConst{V}{p}{T}=-1\implies\PartialConst{p}{T}{V}=\frac{\alpha}{\kappa}$$
+Lastly, by equating the differentials of $S(p,T)$ and $S(V,T)$, and applying Maxwell's relations (along with other results which have been shown along the way), we arrive at the following relationship
+$$\PartialConst{p}{T}{V} = \frac{C_p-C_v}{T\PartialConst{V}{T}{p}} = \frac{\alpha}{\kappa}$$
+$$C_p - C_v  = \frac{\alpha}{\kappa}T\PartialConst{V}{T}{p}=T\frac{\alpha^2V}{\kappa}$$
+Which, for an ideal gas, reduces to the following result
+\CenteredBoxed{C_p - C_v = \frac{pV}{T} = nR_u}
+Since $n$, $T$, and $V$ must always be positive (and $R_u$ is positive) we see that $\kappa>0$ for all stable substances. Also, the difference between the specific heats goes to zero as the isobaric compressibility $\alpha$ or temperature $T$ go to 0 (experiments show that $\kappa\not\to0$). We can also show $C_p/C_v=\kappa/\beta$
+
+\subsubsection{Imperfect Gases}
+The definition of a perfect gas can be derived from quantum theory and statistical mechanics. It suffices to say a perfect or ideal gas obeys the law
+$$p\nu=RT\implies \frac{p\nu}{RT}=1$$
+Deviation from perfect gas behavior can be quantified by the compressibility factor $Z$
+\CenteredBoxed{Z=\frac{p\nu}{RT}}
+
+In general, compressibility curves collapse to well defined curves for reduced temperatures and pressures. Reduced properties are properties divided by their critical values (e.g. $T_r = T/T_{crit}$). The critical state is where liquid and gas phases coexist. The convergence of the curves is known as the principle of corresponding states. Maximum deviation from ideal behavior occurs at the critical values ($T_r=1$ and $p_r=1$). All gases tend towards ideal behavior at low pressures ($p_r\to0$) and high temperatures ($T_r\geq2$).
+
+Imperfect behavior can also be characterized by their deviation from standard chemical potentials. This deviaiton is known as the fugacity and is defined as
+$$\mu=\mu^0+R_uT\ln(f/f^0)$$
+where the naught symbol implies the property is evaluated at the standard state. Fugacity has units of pressure and $f=p$ implies perfect gas behavior. Furthermore, $f/p\to1$ as $p\to0$ for all gases (this supports the above statements regarding the lower limit of the critical pressure).
+
+The fugacity and compressibility are related via
+\CenteredBoxed{\ln\left(\frac{f}{p}\right)=\intlim{0}{p}(Z-1)\frac{d\xi}{\xi}}
+where the right hand side is evaluated with experimental data for the compressibility. With $Z=1$ for a perfect gas we have
+$$\ln\left(\frac{f}{p}\right)=0\implies\frac{f}{p}=1$$
+
+We can also define the partial fugacity for mixtures of imperfect gases
+$$\mu_i=\mu_i^0 + R_uT\ln(f_i)$$
+The partial fugacity will depend on pressure, temperature, and composition. We arrive at an analogous result for the relationship between partial fugacity and compressibility
+\CenteredBoxed{\ln\left(\frac{f_i}{p_i}\right) = \intlim{0}{p}\left(\frac{\hat{\nu}_i}{R_uT}-\frac{1}{\xi}\right)d\xi}
+
+If the interactions between components is not too strong (i.e. the density is not too high) then we can assume the result is similar to the ideal solution. The Lewis-Randall rule suggests
+$$f_i=\chi_if^i$$
+where $f^i$ is the fugacity of the pure substance at the mixture pressure and temperature.
 
 \subsection{Quantum Theory and Wave Mechanics}
 \subsubsection{Bohr Model of the Atom}
