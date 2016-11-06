@@ -10,7 +10,7 @@
 \usepackage[hidelinks]{hyperref}
 \newcommand{\Hrule}{\rule{\textwidth}{0.2mm}\\}
 \newcommand{\Item}[1]{\item \textbf{#1}:}
-\newcommand{\Header}[1]{\noindent\rule{\textwidth}{0.4pt}\\\large{\textit{#1}}\normalsize{}}
+\newcommand{\Header}[1]{\noindent\rule{\textwidth}{0.4pt}\\[0.3cm]\indent \large{\textit{#1}}\normalsize{}\\\noindent\rule{\textwidth}{0.4pt}}
 \newcommand{\CenteredBoxed}[1]{\begin{center}\boxed{#1}\end{center}}
 \newcommand{\sumlim}[2]{\sum\limits_{#1}^{#2}}
 \newcommand{\intlim}[2]{\int\limits_{#1}^{#2}}
@@ -421,9 +421,9 @@ where $p_e$ is the pressure at the exit, $p_\infty$ is the atmospheric pressure,
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 	\begin{enumerate}
-	\item Isentropic compression
+	\item Adiabatic compression
 	\item Isobaric heat addition
-	\item Isentropic expansion
+	\item Adiabatic expansion
 	\item Isobaric heat removal
 	\end{enumerate}
 \end{minipage}
@@ -934,7 +934,7 @@ $$dG = \PartialConst{G}{p}{T,n_i}dp + \PartialConst{G}{T}{p,n_i}dT + \sumlim{i=1
 $$G = H - TS \implies dG = dH - TdS - SdT $$
 $$dG = dU + pdV + Vdp - \left(dU - pdV -\sumlim{i=1}{k}\mu_idn_i\right) - SdT$$
 $$dG = Vdp - SdT + \sumlim{i=1}{k}\mu_idn_i$$
-Equating the seocnd and last equations above results in the following
+Equating the second and last equations above results in the following
 $$\PartialConst{G}{p}{T,n+i}=V,\quad\PartialConst{G}{T}{p,n_i}=-S,\quad\PartialConst{G}{n_i}{p,T}=\mu_i$$
 This leads to the important result that the chemical potential of a pure substance of a single phase is equal to its molar Gibbs free energy.
 
@@ -1028,15 +1028,145 @@ If the interactions between components is not too strong (i.e. the density is no
 $$f_i=\chi_if^i$$
 where $f^i$ is the fugacity of the pure substance at the mixture pressure and temperature.
 
+\subsubsection{Equilibrium Constants}
+In general, reactions can proceed in both the forward (left to right) and reverse (right to left) directions. For example, the reaction $H+O\leftrightharpoons OH$ implies atomic hydrogen and oxygen can collide to form a hydroxyl radical or, inversely, a hydroxyl radical may decompose into atomic hydrogen and oxygen. Equilibrium is achieved when the rates of the forward and reverse reactions are equal. The rates are not necessarily zero at equilibrium!\\
+
+A series of equilibrium constants are defined for reactions which relate concentrations or partial pressures of each species involved, called concentration and pressure equilibrium constants, respectively. The concentration equilibrium constant is defined for a general stoichiometric reaction as follows
+$$aA+bB+...\leftrightharpoons cC + dD +...$$
+$$K_c = \frac{[A]^a[B]^b...}{[C]^c[D]^d]...}=\prod[\mathcal{S}_i]^{\nu_i}$$
+where $[\mathcal{S}_i]$ is the molar concentration of the $i^{th}$ species and $\nu_i$ is its stoichiometric coefficient. The pressure equilibrium constant for the same general stoichiometric  is
+$$K_p=\frac{p_A^ap_B^b...}{p_C^cp_D^d...}=\prod p_i^{\nu_i}$$
+where $p_i$ is the partial pressure of the $i^{th}$ species. The pressure equilibrium constant can be rewritten with Dalton's law of partial pressures for an ideal gas, with $p$ the total pressure of the mixture, as
+$$K_p=p^{\sum\nu_i}\prod\chi_i^{\nu_i}$$
+This reflect Le Chatelier's principle; higher pressures favor the side of the reaction with the least moles. The two constants can be related, for a perfect gas, as
+$$K_c = \sum[\mathcal{S}_i]^{\nu_i}=\sum\left(\frac{n_i}{V}\right)^{\nu_i}=\sum\left(\frac{n_i}{nR_uT/p}\right)^{\nu_i}$$
+\CenteredBoxed{K_c = \left(\frac{1}{R_uT}\right)^{\sum\nu_i}\sum\left(p\chi_i\right)^{\nu_i}=\frac{1}{R_uT}K_p}
+
+The equilibrium constants are defined for specific temperatures (and pressures). The magnitude of the constants indicate which side of the balanced reaction is ``favored'' at the given state. For example, high values ($\geq10^3$) of either constant indicate the right hand side (often the product side) is heavily favored. At unity, neither side is favored over the other; values close to zero ($\leq10^{-3}$) suggest the left hand side (often the reactant side) is favored.\\
+
+The pressure equilibrium constant can also be defined for a perfect gas from the minimization of the chemical potential of the mixture. Recall
+$$\mu_{mix} = \sum\mu_i=\sum\nu_i\mu_i^0 + R_uT\sum\ln\left(\frac{p_i}{p^0}\right)$$
+$$R_uT\sum\ln\left(\frac{p_i}{p^0}\right)=R_uT\ln\left(\prod\frac{p_i}{p^0}\right)=R_uT\ln(K_p)$$
+$$\mathrm{Equilibrium}\implies d\mu_{mix}=0=d\left(\sum\nu_i\mu_i^0 + R_uT\ln(K_p)\right)$$
+All the terms on the right hand side are constants, therefore
+\CenteredBoxed{\ln(K_p)=\frac{-1}{R_uT}\sum\nu_i\mu_i^0}
+This equation shows the temperature dependence of the equilibrium constant(s), which we can investigate further by taking a derivative with respect to temperature
+$$\frac{d}{dT}\left(\ln(K_p)\right) = \frac{d}{dT}\frac{-1}{R_u}\sum\nu_i\frac{\mu_i^0}{T}$$
+$$\frac{d}{dT}\left(\frac{\mu_i^0}{T}\right) = \frac{-\hat{h}_i}{T^2}$$
+$$\frac{d}{dT}\left(\ln(K_p)\right) = \frac{1}{R_u}\sum\nu_i\frac{\hat{h}_i}{T^2}$$
+$$\sum\nu_i\hat{h}_i=\Delta\hat{H}_R$$
+\CenteredBoxed{\frac{d\ln(K_p)}{dT} = \frac{\Delta\hat{H}_R(T)}{R_uT^2}}
+This result is known as van't Hoff's equation. It states simply that the sensitivity of the (natural logarithm of the) equilibrium constant to temperature is equal to the molar enthalpy of the reaction at the current temperature divided by universal gas constant times the temperature squared. It assumes the system is a mixture of perfect gases (hence dropping the pressure dependence from the enthalpy of reaction). Note that the right hand side will be negative if the reaction is exothermic and positive if it is endothermic. Thus, as temperature goes up, an exothermic reaction will favor the left hand side while an endothermic reaction will favor the right hand side. This should make intuitive sense as higher temperatures implies a higher energy system, so reactions which require energy to proceed will see their rates increase whereas those which give off energy will have a harder time (think, where will the energy go?). The change in the equilibrium constant between two states can be found by integration
+$$\intlim{1}{2}d\ln(K_p) = \intlim{T_1}{T_2}\frac{\Delta\hat{H}_R(T)}{R_uT^2}dT$$
+It may be reasonable to assume the heat of reaction is (relatively) constant for small enough change in temperature. If this is the case, the following result is obtained
+\CenteredBoxed{\ln\left(\frac{K_{p,2}}{K_{p,1}}\right) = \frac{\Delta\hat{H}_R(\bar{T})}{R_u}\left(\frac{1}{T_1}-\frac{1}{T_2}\right)}
+where $\bar{T}$ can be $T_1$, $T_2$, or $\frac{1}{2}(T_1+T_2)$.\\
+
+From the relationship between the equilibrium constants for a perfect gas, we have
+$$\ln(K_c) = \ln(K_p) - \left(\sum\nu_i\right)\ln(R_uT) = \ln(K_p) - \Delta n \ln(R_uT)$$
+$$\frac{d}{dT}\ln(K_c) = \frac{d\ln(K_p)}{dT} - \frac{d}{dT}\Delta n\ln(R_uT) = \frac{\Delta\hat{H}_R(T)}{R_uT^2} - \frac{\Delta n}{T}$$
+$$\frac{d\ln(K_c)}{dT} = \frac{\Delta\hat{H}_R(T)-\Delta nR_uT}{R_uT^2} = \frac{\Delta\hat{H}_R(T)-\Delta(pV)}{R_uT^2}$$
+\CenteredBoxed{\frac{d\ln(K_c)}{dT} = \frac{\Delta\hat{U}_R(T)}{R_uT^2}}
+
+All of the above relationships have been derived \emph{assuming a perfect gas mixture}. The extension to imperfect gases uses the fugacity (rather than pressure) and is defined, via a similar manner as the pressure constant, as
+$$\ln(K_f) = \ln\left(\prod f_i\right) = \frac{-1}{R_uT}\sum\nu_i\mu_i^0$$
+where the reference state $f^0$ is chosen such that $f^0/p^0=1$ (i.e. a low pressure state). By choosing a low pressure we can approximate the system as a mixture of perfect gases, which implies the partial molar enthalpy is equal to the enthalpy of the pure substance at the same temperature (and is pressure independent) which allows us to write
+$$\frac{d}{dT}\ln(K_f) = \frac{\Delta H_R^0}{R_uT^2}$$
+where now the heat of the reaction must be taken at the reference pressure (hence the naught).\\
+
+\noindent\textbf{Equilibrium Constants for Mechanisms}:\\
+
+Consider the mechanism
+\begin{align*}
+A + B &\leftrightharpoons C & K_{p,1}\\
+C + D &\leftrightharpoons E + F & K_{p,2}
+\end{align*}
+We could rewrite this as a single reaction 
+$$A + B + D \leftrightharpoons E + F$$
+with a third equilibrium constant $K_{p,3}$. With this, we see
+$$K_{p,1} = \frac{p_C}{p_Ap_B},\quad K_{p,2} = \frac{p_Ep_F}{p_Cp_D},\quad K_{p,3} = \frac{p_Ep_F}{p_Ap_Bp_D}$$
+$$K_{p,3} = K_{p,1}K_{p,2}$$
+Therefore the overall pressure equilibrium constant is equal to the product of the individual reaction equilibrium constants.\\
+
+For a mixture of $m$ species (compounds), consisting of $\alpha$ atomic nuclei, there are $m+2$ unknowns (need 2 thermodynamic properties). If the thermodynamic properties are specified along with the number or ratio of each atomic nuclei then there remain $m-\alpha$ unknowns, which can be found by using $m-\alpha$ independent $K_p$ expressions. This will set up a linear system which can be solved with appropriate techniques.
+
 \subsection{Quantum Theory and Wave Mechanics}
 \subsubsection{Bohr Model of the Atom}
-\subsubsection{Schr{\"o}dinger Equation and Solutions}
+After observing the discrete emission spectra for hydrogen atoms, Bohr postulated the following model for the atomic structure:
+\begin{enumerate}
+\item Atoms consist of heavy, positively charged nuclei and lighter, negatively charged electrons
+\item Electrons orbit the nucleus in discrete orbits; only certain orbits are allowed which are stable. This suggests stationary quantum states as an orbiting electron, from classical mechanics, is accelerating
+\item Frequency of emitted radiation (light) is governed by the change in orbital state $\nu=\Delta E/h$
+\end{enumerate}
+
+The second postulate lead to the assumption that angular momentum is quantized
+\CenteredBoxed{L = m_ev_er = m_e\omega r = n\frac{h}{2\pi} = n\hbar}
+where $n$ is the quantum number and $h$ is Planck's constant. Applying classical mechanics to balance the centripetal acceleration with the electrostatic force gives the following result (assuming circular orbits)
+$$\frac{Ze^2}{r^2} = m_e\frac{v_e^2}{r}\implies Zm_ee^2r = L^2 = n^2\hbar^2$$
+
+The total energy of an electron takes from in the kinetic and potential energies. Define the zero potential state such that $PE\to0$ as $r\to\infty$. Then
+$$E = \frac{1}{2}m_ev_e^2 -\frac{Ze^2}{r} = \frac{Ze^2}{2r} - \frac{Ze^2}{r} = -\frac{Ze^2}{2r}$$
+Employing theories of Planck and Einstein for emission spectra leads to the following (note $r_2 < r_1$)
+\begin{align*}
+\Delta E_{1\to2} = h\nu =& \frac{-Ze^2}{2}\left(\frac{1}{r_2}-\frac{1}{r_1}\right)\\
+=& \frac{Ze^2}{2}\left(\frac{Zm_ee^2}{n_1^2\hbar^2}-\frac{Zm_ee^2}{n_2^2\hbar^2}\right)\\
+=& \frac{2\pi^2Z^2m_ee^4}{h^2}\left(\frac{1}{n_1^2}-\frac{1}{n_2^2}\right)
+\end{align*}
+With $Z=1$ for a hydrogen atom, the distribution of wavelengths in the emission spectrum is
+$$\frac{1}{\lambda}=\frac{\nu}{c} = \frac{2\pi^2e^4m_e}{h^3c}\left(\frac{1}{n_j^2} - \frac{1}{n_i^2}\right)$$
+where the electron is jumping from state $i$ to state $j$ and $n_j < n_i$. (The emitted photon must have a positive amount of energy associated with it, so the electron must jump from a higher orbital to a lower one. If this were not the case, we would be looking at absorption spectra and the roles would simply be reversed.) This equation agrees well with the Balmer series of emission spectra ($n_j=2$) for atomic hydrogen.\\
+
+\Header{Improvements to Bohr's Model}\\
+
+The first improvement was to account for the motion of the electron about the center of mass, which is not necessarily the center of the nucleus. For this, we use the reduced mass
+$$\mu = \frac{m_nm_e}{m_n+m_e},\quad \mu_H \approx 0.99945m_e$$
+
+Clearly this has a small effect, especially on the simple hydrogen atom. It also does not account for the multiple observed lines within the Balmer series (better techniques had shown there to be three lines for the $n=2$ quantum level). This was account for by ditching the circular orbit assumption for elliptic orbits, which introduces an extra degree of freedom to the quantized energy. Application of Sommerfeld's action integral, which uses generalized momenta, yields both radial and azimuthal quantum numbers $n_r$ and $k$, respectively. Thus, for an elliptic orbit with major radius $a$ and minor radius $b$, we have
+$$\frac{a}{b} = \frac{n_r+k}{k} = \frac{n}{k}$$
+$$ a = \frac{\hbar^2}{\mu e^2}\frac{n^2}{Z},\quad b = \frac{\hbar^2}{\mu e^2}\frac{nk}{Z^2}$$
+
+This, however, still did not fully account for the line splitting. That step required in the inclusion of Einstein's special relativity, which relates mass and velocity via the Lorentz factor as
+$$m_{eff} = \frac{m_0}{\gamma} = \frac{m_0}{\sqrt{1+v^2/c^2}}$$
+where $m_0$ is the mass at rest (i.e. zero velocity). This factor is important because electrons move very fast. Putting it all together yields the following, which permits (slightly) different energies for unique values of $n$ and $k$
+$$E_{n,k} = -\frac{2\pi^2\mu e^4}{h^2}\frac{Z^2}{n^2}\left[1+\frac{\alpha^2Z^2}{n}\left(\frac{1}{k}-\frac{3}{4n}\right)\right]$$
+where $\alpha = e^2/\hbar c\approx 0.0073$ is known as the fine structure constant. It was found, however, that there is a limitation on the changes in the azimuthal quantum number. Experiments suggests $k$ must change by one. That is, $\Delta k = \pm1$. Furthermore, the minimum value for $k$ is $n$, for which the orbit is circular.
+
+\subsubsection{Quantized Energies: Translation}
+Consider a free particle in a box. Schr{\''o}dinger's equation along any Cartesian direction reduces to that of a string with fixed boundary conditions, which leads to the result
+$$E_{x_i} = \frac{h^2}{2m}\frac{n_i^2}{L_i^2}$$
+Superposition of the three states gives
+\CenteredBoxed{E_{trans} = \frac{h^2}{8m}\sum\frac{n_i^2}{L_i^2}}
+
+\subsubsection{Quantized Energies: Rotation}
+Consider a pair of atoms rotating about their center of mass. Schr{\''o}dinger's equation for this rigid system (i.e. constant radius) confined to a planar rotation provides the result
+$$E_{\theta} = \frac{h^2n_{\theta}^2}{2I}$$
+Expanding to three-dimensional rotation gives
+\CenteredBoxed{E_{rot} = J(J+1)\frac{\hbar}{2I}}
+
+\subsubsection{Quantized Energies: Vibration}
+Consider a pair of atoms vibrating about their center of mass. Schr{\''o}dinger's equation for this harmonic oscillator gives
+\CenteredBoxed{E_{vib} = h\nu\left(v+\frac{1}{2}\right)}
+
+Note that even for a zero vibrational quantum ($v=0$) this system will poses \emph{some} vibrational energy. Also note the vibrational frequency does not change (i.e. $\nu = const$). Rather, it is the amplitude of the vibration which increases with the quantum number. Does this lead to dissociation at high energies?
+
+\subsubsection{Quantized Energies: Electronic}
+Consider a hydrogen atom: A nucleus with an electron orbiting it. It is possible for the system to store energy in the potential and kinetic energies of the electron. That is, the electron may gain energy and orbit at a greater radius while moving at a greater speed. There are three quantum numbers associated with this: the radial or principal quantum number $n$, the azimuthal or orbital angular moment quantum number $l$, and the magnetic quantum number $m$. There is also the spin quantum, which is always $\pm1/2$, as a result of being a Fermion.
 
 \subsection{Statistical Mechanics}
 \subsubsection{Enumeration of Microstates}
 \subsubsection{Distribution over Microstates}
 
 \subsection{Statistical Thermodynamics}
+\subsubsection{The Maxwellian Velocity Distribution}
+Collision theory requires a specific velocity distribution to satisfy the equilibrium rate condition (i.e. forward equals reverse). Considering bimolecular collision frequency and the application of conservation laws leads to closed form velocity distribution. The distribution is known as the Maxwellian velocity distribution and is described by
+\CenteredBoxed{f_0(C)= \left(\frac{m}{2\pi kT}\right)^{1/2}\exp\left(\frac{-mC^2}{2kT}\right)}
+The speed distribution (the magnitude of the velocity without consideration for direction) is then derived to be
+\CenteredBoxed{\chi_0(C) = \left(\frac{m}{2\pi kT}\right)^{3/2}(4\pi C^2)\exp\left(\frac{-mC^2}{2kT}\right)}
+The mode of the speed distribution is $\sqrt{2kT/m}$, while its mean is $\sqrt{8kT/\pi m}$, and the root-mean-square speed is $\sqrt{3kT/,}$. Note that there is zero probability of finding a particle with zero speed!
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.75]{Graphics/maxwellian_dist.png}
+\end{figure}
 \subsubsection{Boltzmann's Relations}
 \subsubsection{Gas Properties}
 
