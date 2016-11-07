@@ -3,7 +3,7 @@
 \author{Mackenzie Lau}
 \date{}
 \usepackage[margin = 0.75in]{geometry}
-\usepackage{graphicx, subcaption, wrapfig}
+\usepackage{graphicx, subcaption, wrapfig, epstopdf}
 \usepackage{amsmath, amssymb, gensymb, tabularx, multirow, esint, indentfirst}
 \usepackage{mathtools, bm}
 \usepackage[super]{nth}
@@ -1203,7 +1203,7 @@ The mode of the speed distribution is $\sqrt{2kT/m}$, while its mean is $\sqrt{8
 \centering
 \includegraphics[scale=0.75]{Graphics/maxwellian_dist.png}
 \end{figure}
-\subsubsection{Boltzmann's Relations}
+
 \subsubsection{Gas Properties}
 
 \subsection{Chemically Reacting Mixtures}
@@ -1222,7 +1222,68 @@ The mode of the speed distribution is $\sqrt{2kT/m}$, while its mean is $\sqrt{8
 \section{Combustion}
 \subsection{Chemical Kinetics}
 \subsubsection{Basics}
-\subsubsection{Advanced Models}
+Equilibrium thermodynamics considers where a reaction is heading if given enough time (i.e. the end states of a reaction) while kinetics considers the rates at which those changes occur (i.e. the intermediaries). For these rates we will typically define the non-dimensional Damk{\''o}hler number, which is the ratio of a characteristic flow time to a characteristic chemical time
+$$Da = \frac{\tau_{flow}}{\tau_{chem}}$$
+As the Damk{\''o}hler number goes to zero, the flow is said to be chemically frozen. Conversely, as it goes to infinity, the flow is said to posses fast kinetics.\\
+
+Chemical kinetics depends on molecular collisions. The bimolecular collision frequency can be described as
+$$\zeta_{AB} = n_An_B\sigma_{AB}\bar{V},\quad \bar{V}=\sqrt{\frac{8kT}{\pi\mu}}, \quad \sigma_{AB} = \pi d_{AB}^2,\quad d_{AB} = \frac{1}{2}(d_A+d_B)$$
+
+Reaction rates are defined for both the forward and reverse reactions. They can be related by considering the equilibrium condition
+$$A + B \leftrightharpoons C$$
+$$\frac{d[C]}{dt} = -k_f[A][B] + k_r[C]= 0$$
+$$\frac{k_f}{k_r} = \frac{[C]}{[A][B]} = K_c(T)$$
+As the rates are not functions of composition, the relationship holds even for non-equilibrium conditions. Empirical results lead to the Arrhenius rate late for reaction rates as functions of temperature, shown here in its modified form
+\CenteredBoxed{k = AT^b\exp\left(\frac{-E_A}{RT}\right)}
+The activation energy can be found given the reaction rates (either forward or reverse, or both) at a specified temperature. this can be useful in determining if a reaction is endo- or exothermic (i.e. if $\Delta H = E_f-E_r$ is greater or less than zero). The magnitude of the activation energy correlates with the sensitivity of the reaction to temperature, as illustrated below.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{Graphics/k_vs_T.eps}
+\end{figure}
+
+The pre-multiplying factor $A$ (along with the other $T$ dependence term) will affect the precise slopes and scales of the above graph, but the general idea is that higher activation energy reactions will not have high rates until adequately high temperatures are reached. Also note the log scaling of the ordinate: The change in $k$ for the $E_A=10^3$ case between approximately $T=175$ and $T=250$ is seen for the $E_A=10^5$ case between $T=1.6\times^4$ and $2.3\times10^4$. Thus, lower activation energy reaction rates are more sensitive to temperature changes, at least until the extremes are reached.\\
+
+Reaction rates can be used, along with initial reactant compositions, to find characteristic chemical times. That is, for the above reaction, we could say
+$$\tau_{chem} = \frac{[C]-[C]_0}{d[C]/dt}$$
+If we assume the initial concentration of $C$ is almost zero and use the above rate constants, we get
+$$\tau_{chem} = \frac{[C]}{k_f[A][B]}$$
+These expressions get more interesting as the mechanisms become more complicated through dependencies on other species and/or reactions in the mechanism.\\
+
+The partial equilibrium approximation is applied to \emph{reactions} within a mechanism (a system of reactions which approximate a process). The approximation fixes the (relative) concentrations of species' involved in the specified reaction to stoichiometric proportions and thus is only applicable to \emph{very} fast reactions (i.e. orders of magnitude faster than other mechanisms involving said species). It is also, in general, associated with energy neutral reactions, which do not require significant amounts of energy to proceed in either direction.\\
+
+The steady state approximation is applies to \emph{species} within a mechanism or reaction. The approximation fixes the concentration of said species at some initial value and insists the rate of change of the concentration of said species is negligible compared to those of others (but not necessarily zero). That is, the concentration may change over time but it will not change as rapidly as the concentrations of other species will. This approximation is often applied to minor species, which tend to react quickly after forming (formation and destruction rates are close to one another).\\
+
+Most reactions are sustained by radicals -- highly reactive compounds, typically with unpaired electrons. (The single step chemistry approximation ignores radicals.) Thus, overall reaction rates are dependent on the rapid production of these radicals. The initial formation of any radial is called the chain initiation step, which is often a highly endothermic reaction. It may be considered the first step in the reaction. Three paths may follow initiation, depending on the specific mechanism. Chain propagating reactions simply convert some radicals into other radicals. That is, the net number of radicals \emph{produced by the reaction} is zero. This step is often endothermic, though sometimes it may be energy neutral. Chain branching reactions convert some radicals into more radicals, resulting in a net gain of radicals. Chain branching reactions are often exothermic, albeit only slightly. Chain terminating reactions take in a radical and put out non-radical compounds (i.e. stable compounds or, often, products), resulting in a net loss of radicals. Chain terminating reactions are, in the case of exothermic overall reactions, highly exothermic and are where the bulk of the heat release comes from. Chain termination may occur via bimolecular collisions or wall collisions.\\
+
+True reactions are mechanisms composed of vast networks of reactions, each interacting and/or competing for species'. The more accurate mechanisms may contain hundreds of reactions and as many species, sometimes more. The complexity of these mechanisms renders hand calculations futile and requires (super-) computer capabilities. That being said, some simple mechanisms can be considered to get familiar with the concepts.\\
+
+Consider carbon monoxide oxidation (burnout)
+$$CO + \frac{1}{2}O_2 \to CO_2$$
+This is a highly exothermic reaction with an adiabatic flame temperature close to 3000K (indeed, $CO$ burnout is responsible for most of the heat release in alkane combustion, per Turns). Dry $CO$ burnout, where there are no hydrogen species present, are very slow at combustion temperatures. The mechanism is vastly accelerated by adding hydrogen species' to the mix. The reason for the increase is the number of paths hydrogen-containing compounds open up for the formation of $CO_2$, mostly through the availability of the hydroxyl radical $OH$. This is particularly relevant because hydrogen chemistry is faster than $CO$ chemistry, which means the $CO$ are not waiting around for high energy diatomic oxygen or even higher energy atomic oxygen, but can collide with the abundant hydroxyl radicals. Furthermore, the reaction involving hydroxyl radical is chain propagating and therefore does not harm the radical concentrations (it converts an $OH$ to and $H$, which can then go on to react with other things).\\
+
+\Header{NOx Mechanisms}\\
+
+These mechanisms are important because $NO$ goes on to form $NO_2$ in the atmosphere, which is responsible for acid rain and photochemical smog. Thus designers are often concerned with $NO$ production and how it can be mitigated. Perhaps the most widely used $NO$ mechanisms is that of Zeldovich
+$$N_2 + O \leftrightharpoons NO + N$$
+$$O_2 + N \leftrightharpoons NO + O$$
+This reaction is rate-limited by the first reaction, which is endothermic, and works fairly well for dry, lean combustion at high temperatures and moderate residence times. An extension to this basic mechanism increases its accuracy for wet systems (i.e. where hydrogen species' are present). The added reaction, which is exothermic like the second reaction, is
+$$OH + N \leftrightharpoons NO + H$$
+The first reaction is still rate limiting. The Zeldovich mechanism and its extended version are \emph{thermal} mechanisms; they dominate at high temperatures in lean environments, typically require long residence times, and are sensitive to $O$ and $OH$ radical concentrations.\\
+
+An mechanism was derived for explaining low temperature, lean combustion systems. The mechanism uses $N_2O$ as an intermediate between $N_2$ and $NO$ as follows
+$$N_2 + O (+ M) \leftrightharpoons N_2O (+ M)$$
+$$N_2O+H \leftrightharpoons NO + NH$$
+$$N_2O + O \leftrightharpoons 2NO$$
+Additional reactions which compete for intermediate species include
+$$N_2O + H \leftrightharpoons N_2 + OH$$
+$$N_2O + O \leftrightharpoons N_2 + O_2$$
+$$N_2O + OH \leftrightharpoons N_2 + HO_2$$
+$$NH + O \leftrightharpoons NO + H$$
+$$NH + O_2 \leftrightharpoons NO + OH$$
+
+\subsubsection{Plug Flow Reactor}
+
+\subsubsection{Well/Perfectly Stirred Reactor}
 \subsubsection{Reaction Mechanisms}
 \subsubsection{Important Mechanisms}
 
