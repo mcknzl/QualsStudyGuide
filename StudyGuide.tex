@@ -194,6 +194,10 @@ This suggests the center of pressure moves to infinity as a cambered airfoil app
 \Item{Aerodynamic Center} The point about which the aerodynamic moment is independent of angle of attack ($\frac{dc_m}{d\alpha}=0$). The aerodynamic center of an airfoil can be found via
 \CenteredBoxed{\bar{x}_{ac}=0.25-\frac{m_0}{a_0}}
 where $m_0=\frac{dc_{m,c/4}}{d\alpha}$ and $a_0=\frac{dc_l}{d\alpha}$. Note the subtle difference between this expression and that for the center of pressure
+\Item{Mean Aerodynamic Chord} A reference value often used as a 2D representation of a 3D wing. Loosely, the MAC is the chord of a rectangular wing with approximately equivalent aerodynamic pitching moment properties as the original wing. The general formula is
+$$MAC =\frac{2}{S}\intlim{0}{b/2}c(y)^2dy$$
+For the special case of a tapered wing
+$$MAC = \frac{2}{3}c_r\frac{1+\lambda+\lambda^2}{1+\lambda}$$
 \Item{Vortex Panel Method} An extension of the vortex sheet method. Apply vortex sheet theory to segments of an arbitrary lifting body (i.e. not just thin airfoils).
 \Item{Skin Friction Coefficient} 
 	\begin{itemize}
@@ -520,6 +524,26 @@ $$\intlim{-b/2}{b/2}Kc(y)dy = \intlim{-b/2}{b/2}(L'(y)-m'(y))dy$$
 $$KS_W = L-m_{wing}$$
 $$K = \frac{L-m_{wing}}{S_W} \approx \frac{m_{fuselage}}{S_W}$$
 \subsubsection{V-n Diagram}
+The $V$-$n$ diagram shows the relationship between the load factor and speed of an aircraft. It shows the operational envelope -- the values of $V$ and $n$ which are simultaneously feasible. The common choice for $V$ is the equivalent airspeed, which is selected to make the $V$-$n$ diagram altitude-independent. The equivalent airspeed is defined as the airspeed at sea level for which the same lift force is generated (and thus the load factor is the same).
+$$V_{EAS} = V(\rho_0)\big|_{L_0=L}$$
+$$V = \sqrt{\frac{2L}{\rho SC_L}}$$
+$$V_{EAS} = \sqrt{\frac{\rho}{\rho_0}}V = \sqrt{\frac{2nW}{\rho_0SC_L}}$$
+
+\Header{V-n Diagram Constraints}
+\begin{itemize}
+\Item{Basic Lift Generation} The equation for lift relates the load factor to the square of velocity which, for a fixed vehicle, is scaled by the lift coefficient. Thus the proportionality $n\propto V_{EAS}$ gives two (parabolic) lines which constraint the diagram, typically from the left and above.
+\Item{Stall} A load factor of 1 is required for steady level flight, so there is typically a side constraint at the equivalent airspeed where the positive load factor is 1. There may also be one for the $n=-1$ case, for which the equivalent airspeed is typically higher (because $|C_{L,min}|<|C_{L<max}|$).
+\Item{Limit Load Factor} These are the actual loads expected in service. These loads must be sustainable without detrimental, permanent damage to the vehicle structure. Deformation may not interfere with safe operation for loads up to the limit loads. Typical values for commercial vehicles are $\pm3$, while those for fighter aircraft are higher. Constrains design space from above and below.
+\Item{Ultimate Loads} These the loads which the structure must be able to support for three seconds without global failure (local failure like buckling is okay). The values are those for the limit loads multiplied by a factor of safety, which is typically around 1.5. Extended constraints from above and below.
+\Item{Dive Speed} The design dive speed. Vehicle must not experience flutter, control reversal, or divergence up to 1.2$V_D$. Constrains design space from the right.
+\Item{Gust Loads} Gusts will increase the load factor on the vehicle. By assuming the gust velocity is much less than the vehicle airspeed we can employ the small angle approximation and come up with a change in load factor which is linearly proportional to the equivalent airspeed for a given gust speed. This is derived from analyzing the gust as an instantaneous change in angle of attack. There are two important gust speeds: one which must be sustained up to the cruise velocity, and one which must be sustained up to the design dive speed.
+\end{itemize}
+
+The vehicle must be able to operate safely within all of the above constraints, and testing is often performed at the intersections of the lines (red corners, below) which are considered the critical conditions.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Graphics/V-n.PNG}
+\end{figure}
 
 \subsection{Stability and Control}
 \subsubsection{Types of Stability}
@@ -528,7 +552,7 @@ Definition: Control is the ability of a system to move between states/conditions
 \begin{itemize}
 \Item{Stable} A system is stable if any small perturbations from an equilibrium state die out with time, restoring the system to the equilibrium state
 \Item{Unstable} A system is unstable if any small perturbations from an equilibrium state oscillates around or diverges from the equilibrium state
-\Item{Neutral Stability} A system is neutrally stable if disturbances neither grow nor die out with time (e.g. perfect harmonic motion)
+\Item{Neutral} A system is neutrally stable if disturbances neither grow nor die out with time (e.g. perfect harmonic motion)
 \Item{Static Stability} A system is statically stable if its initial response to a disturbance pushes it back towards its initial state (over damped stability)
 \Item{Dynamic Stability} A system is dynamically stable if disturbances oscillate about the equilibrium state but decay in magnitude with time (under damped stability). Most dynamically stable systems are also statically stable (i.e. the initial response is back towards equilibrium, it just overshoots and comes back repeatedly)
 \end{itemize}
@@ -536,17 +560,29 @@ Definition: Control is the ability of a system to move between states/conditions
 A ball in a valley is stable, a ball on top of a hill is unstable. A frictionless pendulum is statically stable and dynamically neutral; a pendulum with friction is statically and dynamically stable; an inverted pendulum is statically unstable (can't even talk about dynamic properties for this case).
 \subsubsection{Stability Derivatives}
 Stability is often described in terms of coefficients, much like lift, drag, and moment. The coefficients in this case are the roll, pitch, and yaw moments
-$$C_l = \frac{L}{qSb}$$
-$$C_m = \frac{M}{qS\bar{c}}$$
-$$C_n = \frac{N}{qSb}$$
+$$\textrm{Pitch: }C_m = \frac{M}{qSb}$$
+$$\textrm{Yaw: }C_n = \frac{N}{qS\bar{c}}$$
+$$\textrm{Roll: }C_l = \frac{L}{qSb}$$
 Note that wing span is used as the reference length for the roll and yaw moments while mean aerodynamic chord is used for the pitching moment. The stability derivatives are taken with respect to the relevant angles, and their sign is important in talking about vehicle stability.
 
+\subsubsection{General Stability}
+A vehicle will be stable if it is able to damp out disturbances and deviations from steady level flight. That is, a change in angle of attack $\alpha$, side slip angle $\beta$, or roll angle $\phi$ should decay with time, per our definition of stability. This requires the vehicle must provide restoring moments when exposed to the aforementioned deviations. Since the moments depend on the angles themselves, we can express this via partial derivatives
+$$\Partial{C_m}{\alpha}<0$$
+$$\Partial{C_n}{\beta}>0$$
+$$\Partial{C_l}{\phi}<0$$
+
 \subsubsection{Static Margin}
+The static margin is the distance between the center of gravity of the aircraft and its neutral point (the point where neutral stability is achieved), typically expressed as a percentage of the mean aerodynamic chord. Mathematically, the static margin represents the (negative of the) derivative of the pitching moment coefficient with respect to the lift coefficient. 
+\CenteredBoxed{\Partial{C_M}{C_L}=-\left(\frac{x_{NP}-x_{cg}}{MAC}\right) = -K}
+
+This is also known as pitch stiffness. Note that if $K$ is positive then the neutral point is \emph{aft} of the center of gravity, and the pitching moment will \emph{decrease} as the lift coefficient (i.e. the angle of attack) increases, creating a stable negative feedback loop. If $K$ were negative then increasing the angle of attack would increase the pitching moment, further increasing the angle of attack. This is characteristic of an unstable positive feedback loop and is generally undesirable.
 
 \subsection{Other Considerations}
 \subsubsection{Subsystem Integration}
+Most subsystems take power off from the engine, and there can be significant transmission and/or conversion losses for the different forms of power/energy (electric, mechanical, pneumatic, hydraulic). The environmental control unit (ECU) is a big one, along with the flight controls. Taking power off of the engine reduces fuel efficiency and thus harms overall performance, so care needs to be taken when designing and integrating subsystems (and the engine, too).
+
 \subsubsection{Aircraft Economics}
-\subsubsection{Life Cycle Cost Analysis}
+Life cycle cost analysis can be used to determine the economic viability of an aircraft. The life cycle includes all four design phases, manufacturing, operation, maintenance, logistics, and disposal. These costs are borne by a variety of stakeholders and the decades-long life means inflation and interest come into play.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
