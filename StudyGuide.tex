@@ -6,6 +6,7 @@
 \usepackage{graphicx, subcaption, wrapfig, epstopdf}
 \usepackage{amsmath, amssymb, gensymb, tabularx, multirow, esint, indentfirst}
 \usepackage{mathtools, bm}
+\usepackage[utf8]{inputenc}
 \usepackage[super]{nth}
 \usepackage[hidelinks]{hyperref}
 \newcommand{\Hrule}{\rule{\textwidth}{0.2mm}\\}
@@ -722,10 +723,6 @@ Thus $\lambda$ can be interpreted as the ratio of the improvement in $f$ to the 
 \end{itemize}
 
 \subsection{Zeroth Order Methods}
-\subsubsection{Random Search}
-Take a step in a random direction from an initial point. If that new point is better than the current point then go there, otherwise find a new random point. Repeat.
-\subsubsection{Grid Search}
-Discretize the design space and evaluate the objective function at nodes (where grid lines cross), then take the best one
 \subsubsection{Compass Search}
 From a starting location sample a $\pm1$ unit step in each design variable independently. Move to the point which provides the best improvement over the current point. Repeat at new point (obviously not re-sampling the point you just came from).
 \subsubsection{Univariate Search}
@@ -1081,14 +1078,14 @@ $$K_c = \sum[\mathcal{S}_i]^{\nu_i}=\sum\left(\frac{n_i}{V}\right)^{\nu_i}=\sum\
 The equilibrium constants are defined for specific temperatures (and pressures). The magnitude of the constants indicate which side of the balanced reaction is ``favored'' at the given state. For example, high values ($\geq10^3$) of either constant indicate the right hand side (often the product side) is heavily favored. At unity, neither side is favored over the other; values close to zero ($\leq10^{-3}$) suggest the left hand side (often the reactant side) is favored.\\
 
 The pressure equilibrium constant can also be defined for a perfect gas from the minimization of the chemical potential of the mixture. Recall
-$$\mu_{mix} = \sum\mu_i=\sum\nu_i\mu_i^0 + R_uT\sum\ln\left(\frac{p_i}{p^0}\right)$$
-$$R_uT\sum\ln\left(\frac{p_i}{p^0}\right)=R_uT\ln\left(\prod\frac{p_i}{p^0}\right)=R_uT\ln(K_p)$$
-$$\mathrm{Equilibrium}\implies d\mu_{mix}=0=d\left(\sum\nu_i\mu_i^0 + R_uT\ln(K_p)\right)$$
+$$\mu_{mix} = \sum\mu_i=\sum\nu_i\mu_i^o + R_uT\sum\ln\left(\frac{p_i}{p^o}\right)$$
+$$R_uT\sum\ln\left(\frac{p_i}{p^o}\right)=R_uT\ln\left(\prod\frac{p_i}{p^o}\right)=R_uT\ln(K_p)$$
+$$\mathrm{Equilibrium}\implies d\mu_{mix}=0=d\left(\sum\nu_i\mu_i^o + R_uT\ln(K_p)\right)$$
 All the terms on the right hand side are constants, therefore
-\CenteredBoxed{\ln(K_p)=\frac{-1}{R_uT}\sum\nu_i\mu_i^0}
+\CenteredBoxed{\ln(K_p)=\frac{-1}{R_uT}\sum\nu_i\mu_i^o}
 This equation shows the temperature dependence of the equilibrium constant(s), which we can investigate further by taking a derivative with respect to temperature
-$$\frac{d}{dT}\left(\ln(K_p)\right) = \frac{d}{dT}\frac{-1}{R_u}\sum\nu_i\frac{\mu_i^0}{T}$$
-$$\frac{d}{dT}\left(\frac{\mu_i^0}{T}\right) = \frac{-\hat{h}_i}{T^2}$$
+$$\frac{d}{dT}\left(\ln(K_p)\right) = \frac{d}{dT}\frac{-1}{R_u}\sum\nu_i\frac{\mu_i^o}{T}$$
+$$\frac{d}{dT}\left(\frac{\mu_i^o}{T}\right) = \frac{-\hat{h}_i}{T^2}$$
 $$\frac{d}{dT}\left(\ln(K_p)\right) = \frac{1}{R_u}\sum\nu_i\frac{\hat{h}_i}{T^2}$$
 $$\sum\nu_i\hat{h}_i=\Delta\hat{H}_R$$
 \CenteredBoxed{\frac{d\ln(K_p)}{dT} = \frac{\Delta\hat{H}_R(T)}{R_uT^2}}
@@ -1105,7 +1102,7 @@ $$\frac{d\ln(K_c)}{dT} = \frac{\Delta\hat{H}_R(T)-\Delta nR_uT}{R_uT^2} = \frac{
 \CenteredBoxed{\frac{d\ln(K_c)}{dT} = \frac{\Delta\hat{U}_R(T)}{R_uT^2}}
 
 All of the above relationships have been derived \emph{assuming a perfect gas mixture}. The extension to imperfect gases uses the fugacity (rather than pressure) and is defined, via a similar manner as the pressure constant, as
-$$\ln(K_f) = \ln\left(\prod f_i\right) = \frac{-1}{R_uT}\sum\nu_i\mu_i^0$$
+$$\ln(K_f) = \ln\left(\prod f_i\right) = \frac{-1}{R_uT}\sum\nu_i\mu_i^o$$
 where the reference state $f^0$ is chosen such that $f^0/p^0=1$ (i.e. a low pressure state). By choosing a low pressure we can approximate the system as a mixture of perfect gases, which implies the partial molar enthalpy is equal to the enthalpy of the pure substance at the same temperature (and is pressure independent) which allows us to write
 $$\frac{d}{dT}\ln(K_f) = \frac{\Delta H_R^0}{R_uT^2}$$
 where now the heat of the reaction must be taken at the reference pressure (hence the naught).\\
@@ -1222,9 +1219,9 @@ The mode of the speed distribution is $\sqrt{2kT/m}$, while its mean is $\sqrt{8
 \section{Combustion}
 \subsection{Chemical Kinetics}
 \subsubsection{Basics}
-Equilibrium thermodynamics considers where a reaction is heading if given enough time (i.e. the end states of a reaction) while kinetics considers the rates at which those changes occur (i.e. the intermediaries). For these rates we will typically define the non-dimensional Damk{\''o}hler number, which is the ratio of a characteristic flow time to a characteristic chemical time
+Equilibrium thermodynamics considers where a reaction is heading if given enough time (i.e. the end states of a reaction) while kinetics considers the rates at which those changes occur (i.e. the intermediaries). For these rates we will typically define the non-dimensional Damk{\"o}hler number, which is the ratio of a characteristic flow time to a characteristic chemical time
 $$Da = \frac{\tau_{flow}}{\tau_{chem}}$$
-As the Damk{\''o}hler number goes to zero, the flow is said to be chemically frozen. Conversely, as it goes to infinity, the flow is said to posses fast kinetics.\\
+As the Damk{\"o}hler number goes to zero, the flow is said to be chemically frozen. Conversely, as it goes to infinity, the flow is said to posses fast kinetics.\\
 
 Chemical kinetics depends on molecular collisions. The bimolecular collision frequency can be described as
 $$\zeta_{AB} = n_An_B\sigma_{AB}\bar{V},\quad \bar{V}=\sqrt{\frac{8kT}{\pi\mu}}, \quad \sigma_{AB} = \pi d_{AB}^2,\quad d_{AB} = \frac{1}{2}(d_A+d_B)$$
@@ -1281,17 +1278,72 @@ $$N_2O + OH \leftrightharpoons N_2 + HO_2$$
 $$NH + O \leftrightharpoons NO + H$$
 $$NH + O_2 \leftrightharpoons NO + OH$$
 
-\subsubsection{Plug Flow Reactor}
-
-\subsubsection{Well/Perfectly Stirred Reactor}
-\subsubsection{Reaction Mechanisms}
-\subsubsection{Important Mechanisms}
-
 \subsection{Reactor Models}
-\subsubsection{Plug Flow Reactor}
-\subsubsection{Well/Perfectly Stirred Reactor}
+The use of reactor models is motivated by the need to couple the chemical kinetics problem with the temperature and pressure of the system -- two intensive variables which are relatively easy to measure. This need arises from the interdependence of the chemical kinetics on temperature and pressure which, in general, requires simultaneous solution of mass, momentum, and energy conservation, along with state equations. Chemical reactions will affect temperature and those two will affect the pressure, while mixing will have an impact on the local mole (or mass) fractions, which drive chemical reactions. For these systems we define the molar production rate as the rate of change of concentration for a given species
+\CenteredBoxed{\dot\omega_i = \frac{d[M_i]}{dt}\equiv\frac{mole}{m^3s}}
+The mass production rate is linked to this via the volume and molar weight
+$$\dot m_i = V\bar{W}\dot\omega$$
+These production rates are directly coupled with the temperature via the specific heat and enthalpy of reaction
+$$m\frac{dh}{dt} = V\dot q'''_{chem} + c_{p_{mix}}\frac{dT}{dt}$$
+$$\frac{dh}{dt} = \frac{V}{m}\sum\bar h_i(T)\dot\omega_i + \frac{1}{m}\left(V\sum[M_i]\bar c_{p_i}\right)\frac{dT}{dt}$$
+$$\bar h_i(T) = \Delta\bar h_{f,T_{ref},i}^o + \intlim{T_{ref}}{T}\bar c_{p_i}dT$$
 
-\subsection{Premized One-Dimensional Combustion Waves}
+Reactor models allow us to ignore the mixing dependence/coupling and focus solely on the energy/species coupling. Recall the Damk{\''o}hler number and its limits
+\begin{align*}
+Da &= \frac{\tau_{mix}}{\tau_{chem}}\\
+Da&\to0\implies\textrm{fast mixing, uniform fluid}\\
+Da&\to\infty\implies\textrm{no mixing}
+\end{align*}
+Chemical reactors may be closed (batch reactor), where the mass of the system is fixed at either constant pressure or constant volume, or open (flow reactor), where mass flows through the system. Closed, constant volume systems are good for analyzing fast reactions such as those in internal combustion engines. Closed, constant pressure systems allows for $pdV$ work, which changes the energy equation and thus modifies the coupling. Both reactor models follow the same ordinary differential equations for species, which simply equates the molar production rate to the difference between the production and destruction rates for each reaction involving said species
+$$\dot\omega_i=\frac{d[M_i]}{dt} = (\nu_{ji}''-\nu_{ji}')\left[k_{j,f}\prod[M_i]^{\nu_{ji}'}-k_{j,r}\prod[M_i]^{\nu_{ji}''}\right]$$
+The energy coupling depends on which type of system is analyzed. Constant pressure systems utilize the enthalpy of the system
+$$\rho\bar c_p\frac{dT}{dt} = \dot q'''_{ext}(t) - \sum\bar h_i(T)\dot\omega_i$$
+while constant volume systems utilize the internal energy, which can be found by the definition of enthalpy (note that enthalpy is what is used to describe the heat of reactions, which is why it appears here)
+$$h = e + pv \implies \frac{dh}{dt} = \frac{de}{dt} + \frac{d(pv)}{dt} = \frac{de}{dt} + p\frac{dv}{dt} + v\frac{dp}{dt}$$
+$$p\frac{dv}{dt} = 0,\quad v\frac{dp}{dt} = v\frac{d}{dt}\left(\frac{R_{mix}T}{v}\right)=R_{mix}\frac{dT}{dt} + T\frac{dR_{mix}}{dt}$$
+$$\frac{de}{dt} = \frac{dh}{dt} - \left(R_{mix}\frac{dT}{dt} + T\frac{dR_{mix}}{dt}\right)$$
+$$\rho\bar c_v\frac{dT}{dt} = \dot q'''_{ext}(t) - \sum\bar e_i(T)\dot\omega_i$$
+where the last step was made by rearranging and combining like terms to convert the $c_p$ term to $c_v$. In both equations,
+$$\bar c_p = \sum Y_i(t)c_p(T(t))$$
+
+\subsubsection{Plug Flow Reactor}
+Plug flow reactors are simple, steady, 1D flow reactor models. The 1D assumption means properties may only vary along the flow direction, with no axial diffusive transport ($Da_x\to\infty$) or cross-stream variations. Furthermore, the walls assumed to be non-reacting and the system is assumed to be non-accelerating. These assumptions lead to the following set of governing equations
+\begin{align*}
+\textrm{Conservation of Mass: } &\frac{d(\rho u_xA)}{dx} = 0\\
+\textrm{Conservation of Energy: } &\rho u_x\bar c_p \frac{dT}{dx} = \dot q'''_{in} - \sum h_i\dot\omega_i\\
+\textrm{Conservation of Momentum: } &(\rho u_xA)\frac{du_x}{dx} = -A\frac{dp}{dx} - \tau_wP\\
+\textrm{Conservation of Species: } &(\rho u_x)\frac{dY_i}{dx} = \bar W_i \dot\omega_i
+\end{align*}
+
+(The last term in the momentum equation is viscous dissipation at the wall in the form of the shear stress times the length of the perimeter.)\\
+
+Molecules in the gas collide as they move from one end of the reactor to the other. These collisions may or may not be sufficient in frequency and energy to begin the combustion process, as we only consider the processes which take place within the reactor. If the gas remains within the reactor long enough for rapid radical buildup to take place then the fluid particles will accelerate as a result of the heat release (which leads to expansion). The residence time -- the time a fluid packet spends inside the reactor -- decreases as the bulk velocity increases (plug flow reactors have a fixed, finite length).\\
+
+The induction time or autoignition delay is an important metric for plug flow reactors. Induction time is the time delay between the gas entering the reactor and the start of combustion. The precise definition of when combustion begins is not trivial; a convenient point to take is the knee of the temperature profile versus residence time (maximum curvature). The residence time may be compared to a characteristic chemical time
+$$\tau_{chem} \propto \frac{1}{k} = \exp\left[E_A/RT\right]$$
+$$\ln(\tau_{chem})\propto\frac{1}{T}$$
+If the residence time is much less than the characteristic chemical time then it is unlikely the reactor will contain any (significant) reactions. Conversely, if the chemical time is much less than the residence time then the gas will likely ignite very early in the process and approach equilibrium at the exit. These are the limits of the Damk{\"o}hler number for plug flow reactors
+$$Da_{PFR} = \frac{\tau_{res}}{\tau_{chem}}$$
+
+\Header{Effects on Autoignition Delay}\\
+
+Pressure has an approximately inverse effect of autoignition delay
+$$\frac{\tau_{chem}}{\tau_{chem,0}} \approx \frac{p_0}{p}$$
+For example, if the pressure is increased by a factor of 10 then the induction time will decrease by approximately a factor of 10. This is mostly a result of the increase in collision frequency which comes with higher pressure. More collisions means a higher likelihood of all chain reactions (initiation, branching, propagation, and termination).\\
+
+Equivalence ratio has a nearly negligible effect on the autoignition delay. The effects of temperature and pressure are far more significant than that of equivalence ratio. There is a small effect; the delay time will decrease slightly with increasing equivalence ratios, particularly for colder inlet temperatures, but the change is so small it can be ignored.
+
+\subsubsection{Well/Perfectly Stirred Reactor}
+Well- or perfectly-stirred reactor models are useful for examining highly mixed engines, low pressure combustion systems, low speed reactors (fast diffusion), turbulent parts of non-premixed combustion, residence time issues, and high temperature chemical kinetics. They rely on the assumption that the Damk{\"o}hler number for mixing is much less than one (i.e. very, very fast mixing). Inlet conditions are specified (mass flow rate, temperature, species mass fractions) and the fast mixing assumption means the interior and outlet conditions are the same. Thus the properties at the outlet are dependent on the resident time within the reactor, which is given by the conservation of mass
+$$\frac{d}{dt}m_{sys} = 0\implies \tau_{res} = \frac{\rho V}{\dot m_{in}}$$
+The governing equations are then
+\begin{align*}
+\textrm{Conservation of Mass: } &\frac{d(\rho V)}{dt} = \dot m_{in} - \dot m_{out}\\
+\textrm{Conservation of Energy: } &\bar c_p\frac{dT}{dt} = \frac{\dot m_{in}}{\rho V}\sum Y_{i,in}(h_{i,in}-h_i) - \frac{1}{\rho}\sum h_i\dot\omega_i\bar W_i  + \frac{q'''_{in}}{\rho}-\frac{1}{\rho}\frac{dp}{dt}\\
+\textrm{Conservation of Species: } &\frac{dY_i}{dt} = \frac{\dot m_{in}}{\rho V}(Y_{i,in}-Y_i) + \frac{\dot\omega_i\bar W_i}{\rho}
+\end{align*}
+
+\subsection{Premixed One-Dimensional Combustion Waves}
 \subsubsection{Planar Detonations}
 
 \subsection{Laminar Premixed Flames}
