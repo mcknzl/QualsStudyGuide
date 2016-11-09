@@ -11,7 +11,7 @@
 \usepackage[hidelinks]{hyperref}
 \newcommand{\Hrule}{\rule{\textwidth}{0.2mm}\\}
 \newcommand{\Item}[1]{\item \textbf{#1}:}
-\newcommand{\Header}[1]{\noindent\rule{\textwidth}{0.4pt}\\[0.3cm]\indent \large{\textit{#1}}\normalsize{}\\\noindent\rule{\textwidth}{0.4pt}}
+\newcommand{\Header}[1]{\noindent\rule{\textwidth}{0.4pt}\\[0.3cm]\indent \large{\textit{#1}}\normalsize{}\\[-0.1cm]\noindent\rule{\textwidth}{0.4pt}}
 \newcommand{\CenteredBoxed}[1]{\begin{center}\boxed{#1}\end{center}}
 \newcommand{\sumlim}[2]{\sum\limits_{#1}^{#2}}
 \newcommand{\intlim}[2]{\int\limits_{#1}^{#2}}
@@ -432,6 +432,7 @@ where $p_e$ is the pressure at the exit, $p_\infty$ is the atmospheric pressure,
 	\item Isobaric heat removal
 	\end{enumerate}
 \end{minipage}
+\vspace{1cm}
 \Item{Property Profiles}\\
 
 \begin{minipage}{0.48\textwidth}
@@ -1315,7 +1316,32 @@ Plug flow reactors are simple, steady, 1D flow reactor models. The 1D assumption
 \textrm{Conservation of Species: } &(\rho u_x)\frac{dY_i}{dx} = \bar W_i \dot\omega_i
 \end{align*}
 
-(The last term in the momentum equation is viscous dissipation at the wall in the form of the shear stress times the length of the perimeter.)\\
+\Header{Conservation of Mass}\\
+
+The equation for conservation of mass simply states that there is no mass destruction or creation along the length of the reactor. If the reactor has a non-constant cross sectional area then the density and axial velocity terms must vary such that the mass flux through any cross section is constant. This couples all the other conservation equations.
+
+For the case of constant cross sectional area, the mass conservation equation reduces to
+$$\frac{d}{dx}(\rho u_x) = 0$$
+Typically, the larger effect is to increase the axial velocity and decrease density, rather than the other way around (reduce axial velocity and increase density).\\
+
+\Header{Conservation of Energy}\\
+
+The right hand side the energy equation represents the transport of heat (energy) in the flow direction via mass (convection). It requires the temperature to remain constant for a non-reacting, adiabatic system, which is expected. For a reacting adiabatic system (i.e. first term on left hand side is zero) the heat released by the reactions must be convected downstream. Alternatively, for an endothermic process, the energy required for the reaction must come from upstream via convection. The lack of a diffusive term -- which would make this a second order ODE -- means the only way heat can move around is by convection.
+
+Adding or removing heat from the system (i.e. non-zero first term on right hand side) would have a significant impact on the temperature profile. Adding heat could push the mixture to ignition, while removing heat could prevent the mixture from igniting at all. Whether or not either of these things would happen depends on the precise heat flux profile (i.e. volumetric heat flux as a function of axial location) and the inlet conditions.
+
+\Header{Conservation of Momentum}\\
+
+The left hand side of this equation is the convection of momentum. Recall that the term in parentheses is the mass flux, the spatial gradient of which is necessarily zero according to the first conservation equation (mass). The first term on the right hand side is a pressure gradient term, while the last term is viscous dissipation at the wall in the form of the shear stress times the length of the perimeter.
+
+This equation is very similar in form to Bernoulli's equation (really Euler's equation, as it is in differential form), which is no coincidence. Conservation of momentum is a standard (necessary) conservation equation for flowing systems.
+
+\Header{Conservation of Species}\\
+
+The left hand side of this conservation equation is the convection of species mass fraction in the flow direction. The right hand side of the equation is the molar production rate (as a function of axial location) times the molar mass of said species. There is one species conservation equation per species involved in the overall mechanism.\\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\noindent\rule{\textwidth}{0.4pt}\\[0.3cm]
 
 Molecules in the gas collide as they move from one end of the reactor to the other. These collisions may or may not be sufficient in frequency and energy to begin the combustion process, as we only consider the processes which take place within the reactor. If the gas remains within the reactor long enough for rapid radical buildup to take place then the fluid particles will accelerate as a result of the heat release (which leads to expansion). The residence time -- the time a fluid packet spends inside the reactor -- decreases as the bulk velocity increases (plug flow reactors have a fixed, finite length).\\
 
@@ -1342,6 +1368,28 @@ The governing equations are then
 \textrm{Conservation of Energy: } &\bar c_p\frac{dT}{dt} = \frac{\dot m_{in}}{\rho V}\sum Y_{i,in}(h_{i,in}-h_i) - \frac{1}{\rho}\sum h_i\dot\omega_i\bar W_i  + \frac{q'''_{in}}{\rho}-\frac{1}{\rho}\frac{dp}{dt}\\
 \textrm{Conservation of Species: } &\frac{dY_i}{dt} = \frac{\dot m_{in}}{\rho V}(Y_{i,in}-Y_i) + \frac{\dot\omega_i\bar W_i}{\rho}
 \end{align*}
+
+\Header{Conservation of Mass}\\
+
+The right hand side is the time rate of change of the mass contained within the reactor, while the left hand side is the difference between the inlet and outlet mass fluxes. This is a direct application of Reynold's Transport Theorem to the control volume enclosing the reactor. Only one inlet is considered because of the well-stirred assumption, which would see the two streams completely and instantaneously mixed upon entering the reactor. The steady assumption drives the difference to zero and thus $\rho V = const.$.
+
+\Header{Conservation of Energy}\\
+
+The right hand side of the equation is the time rate of change of heat contained within the system (the $\bar c_p$ term is a function of composition, and thus, possibly, a weak function of time). The first term on the right hand side is the difference in enthalpy between the inlet and outlet states. The second term is the enthalpy of formation for each species, in the form of the specific enthalpy and the mass production rate of that species. This accounts for both the destruction of reactants and the formation of products (recall that enthalpy of formation is negative for exothermic reactions and positive for endothermic reactions). The third term is volumetric heat addition, while the last is a work term. We may assume a well-stirred reactor to be isobaric and thus can neglect this term.
+
+\Header{Conservation of Species}\\
+
+The left hand side is the time rate of change of the mass fraction of each species contained within the reactor. The first term on the right hand side is the difference in mass fractions between the inlet and outlet streams ($\dot m_{in} = \dot m_{out}$ and $Y_i = Y_{i,out}$), while the second term is the destruction/formation term from chemical reactions.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\noindent\rule{\textwidth}{0.4pt}\\[0.3cm]
+
+
+Some simplifying assumptions for well-stirred reactors include the steady operation assumption, which requires all the time derivatives to be zero. This reduces the system to an algebraic one. Another useful assumption is the constant and uniform mixture specific heat. This assumption simplifies the energy equation, particularly for transient problems. Finally, single step chemistry may be useful. The single step approximation implies
+$$\tau_{mix} << \tau_{chem} << \tau_{res}$$
+the latter of which may generally be true. The Damk{\"o}hler number associated with the residence and chemical times is extremely important for well-stirred reactors. The question of whether or not the reactor will ignite or extinguish is precisely a question residence vs chemical times. Higher activation energies -- and thus longer chemical times -- will require longer residence times before combustion can occur. These higher $E_A$ reactions will be more sensitive to inlet temperature than their low $E_A$ counterparts, which will see at least partial combustion as most reasonable inlet temperatures.
+
+The effect of pressure on PSR outlet conditions is similar to that on a PFR. Higher pressure means higher collision frequencies, which decreases the autoignition delay. The increase in pressure will also push the mixture closer to complete combustion (assuming it has ignited) by Le Chatelier's principle.
 
 \subsection{Premixed One-Dimensional Combustion Waves}
 \subsubsection{Planar Detonations}
