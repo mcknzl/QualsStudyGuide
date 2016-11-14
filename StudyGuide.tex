@@ -906,6 +906,30 @@ $$\hat{f}(\boldx) = \sumlim{i=1}{m}\frac{\alpha_i}{1+\exp\left(-\bm{\beta}-\suml
 $$\phi(a_i)=\tan^{-1}(a_i)$$
 $$\hat{f}(\boldx) = \sumlim{i=1}{m}\alpha_i\tan^{-1}\left(\bm{\beta} + \sumlim{j=1}{p}w_{i,j}x_j\right)$$
 
+\subsection{Optimization Problem Setup and Graphical Analysis}
+This (sub)section contains problems from Aurora's Introduction to Optimum Design
+\begin{itemize}
+\Problem{2.1}
+A 100 by 100 meter lot is available to construct a building. At least 20,000 square meters of total floor space is needed and the maximum allowable height is 21 meters. The area of the parking lot outside must be at least 25 percent of the total floor area. Each story is a fixed height of 3.5 meters, and the cost of the building in millions of dollars is 0.6$h$ + 0.001$A$ where $h$ is the height and $A$ is the area of each floor. Formulate the problem\\
+
+Before we do the full setup, let's transform some variables. The height of the building and the total area can be expressed in terms of the number of floors as $h = 3.5n,\ A_{total} = nA$. Then the standard form of the problem is:
+
+\begin{minipage}{0.45\textwidth}
+	\begin{center}
+		Minimize $0.6(3.5n) + 0.001A$ \\
+		Subject to $3.5n\leq21\ (\implies n\leq6)$,\\
+		$nA\geq20000$, and \\
+		$(1+0.25n)A\leq100^2$\\
+		With $n\in\mathbb{N}$
+	\end{center}
+\end{minipage}
+\begin{minipage}{0.53\textwidth}
+	\includegraphics[width=\textwidth]{Graphics/aurora_p2-1.png}
+\end{minipage}
+
+\end{itemize}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Thermodynamics}
@@ -1225,7 +1249,7 @@ $$\mu^0(T) + RT\ln(p) = \hat h - T\hat s$$
 $$\mu^0(T) + RT\ln(p) = \hat h - T\left(\frac{d\mu^0}{dT} + R\ln(p)\right)$$
 \CenteredBoxed{\hat h = \mu^0(T) + T\frac{d\mu^0}{dT}}
 $$\hat u = \hat h - p\hat v = \hat h - RT$$
-\CenteredBoxed{\hat u = \mu^0(T) + T\left(R-\frac{d\mu^0}{dT}\right)}
+\CenteredBoxed{\hat u = \mu^0(T) + T\left(\frac{d\mu^0}{dT} + R\right)}
 
 Mayer's relation is a direct consequence of these derivations
 \CenteredBoxed{\hat c_p - \hat c_v = R}
@@ -1505,6 +1529,67 @@ the latter of which may generally be true. The Damk{\"o}hler number associated w
 The effect of pressure on PSR outlet conditions is similar to that on a PFR. Higher pressure means higher collision frequencies, which decreases the autoignition delay. The increase in pressure will also push the mixture closer to complete combustion (assuming it has ignited) by Le Chatelier's principle.
 
 \subsection{Premixed One-Dimensional Combustion Waves}
+Consider a flame to be a sheet with reactants moving into the flame from one side and products leaving it from the other. Here we are assuming infinitely fast, single-step chemistry (i.e. the flame has no thickness). The standard conservation equations -- mass, energy, momentum, and species -- all still apply to a control volume placed around the flame. Doing this control volume analysis allows us to ignore (for now) the specifics of what is happening inside the flame and concern ourselves only with the properties of the incoming reactants and outgoing products.
+%\textrm{Conservation of Energy: } &h_{1,s} + \frac{1}{2}u_1^2+q = h_{2,s} + \frac{1}{2}u_2^2\\
+%\textrm{Conservation of Species: } &(\rho u_x)\frac{dY_i}{dx} = \bar W_i \dot\omega_i
+
+\subsubsection{Rayleigh Line}
+Consider the conservation of mass applied to the control volume
+$$\frac{d(\rho u_xA)}{dx} = 0$$
+The dimensionality of the problem reduces this to
+$$\frac{d(\rho u)}{dx} = 0\implies\rho_1u_1=\rho_2u_2=\dot m''$$
+Furthermore, we can neglect the shear stress term in momentum conservation to get
+$$p_1+\rho_1u_1^2 = p_2+\rho_2u_2^2$$
+Substituting mass conservation into momentum conservation gives
+$$p + \dot m''^2/\rho = const.\to p = -\dot m''^2\left(\frac{1}{\rho}\right)$$
+\CenteredBoxed{\frac{dp}{d(1/\rho)} = -\dot m''^2}
+This linear relationship between the pressure and specific volume (inverse of density) is known as the Rayleigh line.
+
+\subsubsection{Rankine-Hugoniot}
+Energy conservation is applied via the Reynolds Transport Theorem
+$$\frac{d}{dt}E = \frac{d}{dt}\intlim{\Omega}{}\rho edV + \intlim{\partial\Omega}{}\rho e(v\cdot n)dS$$
+The energy of the system consists of the enthalpy and kinetic energy of the gas, and there is no work or heat being added to the gas as it flows across the flame (it is releasing heat, though), so conservation of energy reduces to
+$$h_1 + \frac{1}{2}u_1^2 = h_2 + \frac{1}{2}u_2^2$$
+Assuming the stagnation enthalpy is constant (because no work is being done) we can express the enthalpy in terms of the sensible and chemical forms
+$$h = h_s + h_c$$
+The reactants release their chemical energy upon combusting, converting that enthalpy from chemical to sensible form in the products as the heat of reaction
+$$h_{1,s} + q = h_{2,s}$$
+This gives the final form of energy conservation as
+$$h_{1,s} + \frac{1}{2}u_1^2 + q = h_{2,s} + \frac{1}{2}u_2^2$$
+We have the difference in squared velocity from momentum conservation
+$$p_2-p_1 = \dot m''\left(\frac{1}{\rho_1}-\frac{1}{\rho_2}\right) = (\rho_1u_1)^2\left(\frac{1}{\rho_1}-\frac{1}{\rho_2}\right) $$
+\begin{align*}
+u_1^2 &= \frac{1}{\rho_1^2}\left(\frac{p_2-p_1}{1/\rho_1-1/\rho_2}\right)\\
+u_2^2 &= \frac{1}{\rho_2^2}\left(\frac{p_2-p_1}{1/\rho_1-1/\rho_2}\right)\\
+u_1^2-u_2^2 &= \left(\frac{1}{\rho_1^2}-\frac{1}{\rho_2^2}\right)\left(\frac{p_2-p_1}{1/\rho_1-1/\rho_2}\right)\\
+u_1^2-u_2^2 &= \left(\frac{1}{\rho_1}-\frac{1}{\rho_2}\right)\left(\frac{1}{\rho_1}+\frac{1}{\rho_2}\right)\left(\frac{p_2-p_1}{1/\rho_1-1/\rho_2}\right)\\
+u_1^2-u_2^2 &= (p_2-p_1)\left(\frac{1}{\rho_1}+\frac{1}{\rho_2}\right)
+\end{align*}
+Now we make the calorically and thermally perfect gas assumptions, which are not a bad assumption because the incoming gases will be at a relatively low temperature and the outgoing gases will be at a relatively high temperature. Thus we can express the change in sensible enthalpy as
+$$\Delta h_{1\to2,s} = c_p\Delta T_{1\to2} = \frac{\gamma}{\gamma-1}\left(\frac{p_2}{\rho_2}-\frac{p_1}{\rho_1}\right)$$
+Combining the results for velocity and sensible enthalpy into the basic energy conservation equation yields
+$$q = \Delta h_{1\to2,s} - \frac{1}{2}\Delta u_{1\to2}^2$$
+\CenteredBoxed{q = \frac{\gamma}{\gamma-1}\left(\frac{p_2}{\rho_2}-\frac{p_1}{\rho_1}\right) - \frac{1}{2}(p_2-p_1)\left(\frac{1}{\rho_1}+\frac{1}{\rho_2}\right)}
+
+This defines a rectangular hyperbola, known as the Rankine-Hugoniot line. It combines mass, energy, and momentum conservation principles into a single equation. Positive heat (exothermic) pushes the hyperbola up and to the right, while negative heat (endothermic) pushes it down and to the left. No heat release gives the solution for a non-reacting shock Hugoniot.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Graphics/detonations_deflagrations.png}
+\end{figure}
+
+\subsubsection{Allowed Solutions}
+The solution to a given 1D flame problem is found at the intersection of the Rankine-Hugoniot and Rayleigh lines. There are two points where there is exactly one solution, known as the upper and lower Chapman-Jouguet points. For all other cases there are multiple intersections, all but one of which are eliminated on the basis of the second law of thermodynamics. Applied to flowing systems in the absence of work, the second law of thermodynamics requires flows to accelerate towards the local sound as heat is added.
+
+\begin{itemize}
+\Item{Strong Detonations} Possible, but unlikely. Expansion events downstream could propagate upstream, decreasing the pressure behind the flame and slowing it down until it reaches Mach 1.
+\Item{Upper CJ Point} Defines the CJ detonation, where the velocity of the product gases is the local sound speed. It is also the minimum wave speed for detonations, since it has the least negative slope of any detonation.
+\Item{Weak Detonations} Product gases are supersonic. This violates the second law according to the structure of the flame.
+\Item{Weak Deflagrations} Totally possible. Subsonic on both sides of the flame.
+\Item{Lower CJ Point} Defines the CJ deflagration. The velocity of the product gases at this point is also the local sound speed, and it is the maximum allowed wave speed for deflagrations (most negative slope).
+\Item{Strong Deflagrations} Reactants are subsonic but products are supersonic. Direct violation of second law.
+\end{itemize}
+
+
 \subsubsection{Planar Detonations}
 
 \subsection{Laminar Premixed Flames}
