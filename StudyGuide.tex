@@ -125,9 +125,26 @@
 \begin{itemize}
 \Item{Purpose of an Airfoil} Generate lift
 \Item{Draw an Airfoil}
-\Item{NACA 4 Series} \nth{1} = max camber as percent of chord; \nth{2} = location of max camber as percent of chord; \nth{3}-\nth{4} = max thickness as percent of chord
-\Item{NACA 5 Series} \nth{1} = two-thirds design $c_l$, in tenths; \nth{2} = location of max camber, in fifths; \nth{3} = reflex camber; \nth{4}-\nth{5} = thickness as percent of chord
-\Item{NACA 6 Series} \nth{1} = 6 (series ID); \nth{2} = location of minimum pressure, in tenths of percent of chord; \nth{3} = design lift coefficient, in tenths; \nth{4}-\nth{5} = max thickness as percent of chord
+\Item{NACA 4 Series} 
+	\begin{itemize}
+	\item \nth{1} = max camber as percent of chord
+	\item \nth{2} = location of max camber as percent of chord
+	\item \nth{3}-\nth{4} = max thickness as percent of chord
+	\end{itemize}
+\Item{NACA 5 Series}
+	\begin{itemize}
+	\item \nth{1} = two-thirds design $c_l$, in tenths
+	\item \nth{2} = location of max camber, in fifths
+	\item \nth{3} = reflex camber
+	\item \nth{4}-\nth{5} = thickness as percent of chord
+	\end{itemize}
+\Item{NACA 6 Series}
+	\begin{itemize}
+	\item \nth{1} = 6 (series ID)
+	\item \nth{2} = location of minimum pressure, in tenths of percent of chord
+	\item \nth{3} = design lift coefficient, in tenths
+	\item \nth{4}-\nth{5} = max thickness as percent of chord
+	\end{itemize}
 \Item{Lift Coefficient} $c_l \equiv \frac{L'}{qc},\ q = \frac{1}{2}\rho \Vinfty^2$
 \Item{Drag Coefficient} $c_d \equiv \frac{D'}{qc}$
 \Item{Moment Coefficient} $c_m \equiv \frac{M'}{qc^2}$
@@ -434,23 +451,21 @@ where $p_e$ is the pressure at the exit, $p_\infty$ is the atmospheric pressure,
 	\Item{Nozzle} Accelerate gas and exhaust it at $V_j$
 	\end{itemize}
 \Item{The (Ideal) Brayton Cycle}\\
-
 \begin{minipage}{0.48\textwidth}
 	\includegraphics[width=\textwidth]{Graphics/brayton.png}
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 	\begin{enumerate}
-	\item Adiabatic compression
+	\item Adiabatic (isentropic) compression
 	\item Isobaric heat addition
-	\item Adiabatic expansion
+	\item Adiabatic (isentropic) expansion
 	\item Isobaric heat removal
 	\end{enumerate}
 \end{minipage}
 \vspace{1cm}
 \Item{Property Profiles}\\
-
 \begin{minipage}{0.48\textwidth}
-	\includegraphics[width=\textwidth]{Graphics/engine_profiles.png}
+	\includegraphics[height = 3in]{Graphics/engine_profiles.png}
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 	\begin{itemize}
@@ -1258,7 +1273,60 @@ $$\alpha = \frac{1}{V}\PartialConst{V}{T}{p} = \frac{1}{T}$$
 $$\kappa = \frac{-1}{V}\PartialConst{V}{p}{T} = \frac{1}{p}$$
 \CenteredBoxed{\hat c_p - \hat c_v = \frac{T\alpha^2\hat v}{\kappa} = \frac{p\hat v}{T} = R}
 
+\Problem{7} Two gases, $A$ and $B$, are contained in a well-insulated box, separated by an impermeable membrane. The temperature, pressure, moles of gas, and initial volumes are all known. The gases are allowed to mix and heat is removed from the system. Determine the final temperature and pressure, the change in entropy, and the change in Gibbs free energy.\\
 
+\emph{Assumptions}: The gases are ideal and calorically perfect. The molar specific heats of the gases are known. The surroundings act as an isothermal resevoir at some known temperature $T_{ext}$.\\
+
+The final temperature can be found by energy balance of the isolated system
+$$n_A\hat c_{v_A}(T_f-T_A) + n_B\hat c_{v_B}(T_f-T_B) + Q_{out} = 0$$
+\CenteredBoxed{T_f = \frac{-Q_{out} + n_A\hat c_{v_A}T_A + n_B\hat c_{v_B}T_B}{n_A\hat c_{v_A} + n_B\hat c_{v_B}}}
+The final pressure can then be found by applying the ideal gas law
+\CenteredBoxed{p_f = \frac{(n_A+n_B)RT_f}{V_A+V_B}}
+
+The entropy generation can be found by breaking down the process into three processes: isochoric thermal equilibration, isothermal mechanical equilibration, and heat extraction. The general expression for the differential entropy is given for clarity.
+$$ S = S(U,V) \to dS = \PartialConst{S}{U}{V}dU + \PartialConst{S}{V}{U}dV$$
+$$dS = \frac{\partial Q}{T} + \frac{p}{T}dV = \frac{c_V}{T}dT + \frac{nR}{V}dV$$
+The isochoric thermal equilibration (i.e. heat transfer across the impermeable membrane with $dV = 0$) gives
+$$dS = dS_A + dS_B = \frac{\partial Q}{T}\Big|_A + \frac{\partial Q}{T}\Big|_{B}$$
+Integration between the two states, recognizing that the heat transfered from one gas must go to the other gas and employing the calorically perfect assumption gives
+$$\Delta S_{therm} = n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right)$$
+Now allow the gases to mix isothermally ($dT = 0$)
+$$\Delta S_{mech} = n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right)$$
+Finally, extract heat from the system to the surroundings (exactly how this is achieved is not important), accounting for the entropy changes in both gases as well as in the resvoir.
+$$\Delta S_{heat} = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}$$
+Put it all together to get the total entropy change
+\begin{align*}
+\Delta S =& \Delta S_{therm} + \Delta S_{mech} + \Delta S_{heat} \\
+=& n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right)+ n_BR_u\ln\left(\frac{V_f}{V_B}\right) \\
+& + n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}
+\end{align*}
+
+A shorthand approach to this would be to apply the $TdS$ relations to each gas independently, recognizing the rules of logarithms to simplify the expression
+\CenteredBoxed{\Delta S = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_A}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_B}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right) + \frac{Q_{out}}{T_{ext}}}
+
+The initial Gibbs free energy is the sum of the two gases which, applying the ideal gas assumption, is equal to the chemical potential times the number of moles
+$$G_{sys,init} = G_A + G_B = n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))$$
+where it is assumed $\mu^0$ is taken at the reference pressure of 1 with units consistent with the units of the pressure term(s). After mixing, the temperatures of the gases change and the partial pressure of each gas may change. So the Gibbs function after mixing is given by
+$$G_{sys,mixed} = G_A + G_B = n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))$$
+Thus the change in the Gibbs function between the starting and ending points of the whole process is
+\begin{align*}
+\Delta G_{sys} =& G_{sys,mixed} - G_{sys,init}\\
+=& n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))\\
+&- \left(n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))\right)
+\end{align*} 
+
+\Problem{8} How would you modify a premixed combustion process (i.e. hardware is fixed but properties are variable) when the fuel is switched from methane to decane?\\
+
+You would want to increase the residence time and increase the inlet temperature. Increasing the residence time can be achieved by slowing down the mass flow rate of premixed fluid, while increasing the inlet temperature can be achieved by some preheating method. You would want to do this because decane is significantly heavier than methane; $C_{10}H_{22}$ for $n$-decane has a molar mass of $10\times12 + 22\times1 = 144$ vs $CH_4$ for methane which has a molar mass of 16. The higher mass means lower diffusivity, so it does not mix as readily with the rest of the fluid. This, in turn, limits the reaction rates (chemical kinetics). That limitation can be overcome by simply allowing more time for the reactions to happen and by increasing the temperature, which increases the overeall energy and the collision frequency. You may also want to shift the stoichiometry towards the slightly rich condition; this will increase the heat released by the reactions, which facilitates the overall process in a manner similar to increasing the inlet temperature.
+
+\Problem{9} Write the (pressure) equilibrium constant for the reaction 
+$$aA + bB \to cC$$
+
+\CenteredBoxed{K_p = \frac{\chi_C^c}{\chi_A^a\chi_B^b}p^{(c-(a+b))}}
+
+In general, is $K_p$ a function of pressure? Justify your answer.\\
+
+$K_p$ is purely a function of temperature, even though pressure may show up on the right hand side of the above equation. The fact that it is purely a function of temperature can be seen by deriving $K_p$ from the chemical potential of the mixture. The physical manifestation of this independence is that $K_p$ does not itself respond to changes in pressure; the ratio of mole fractions, raised to the powers of the stoichiometric coefficients, will adjust as pressure is changed such that the above equation holds for a a given, fixed $K_p$ at a given, fixed temperature.
 \end{itemize}
 
 \subsection{Quantum Theory and Wave Mechanics}
@@ -1336,21 +1404,8 @@ The speed distribution (the magnitude of the velocity without consideration for 
 The mode of the speed distribution is $\sqrt{2kT/m}$, while its mean is $\sqrt{8kT/\pi m}$, and the root-mean-square speed is $\sqrt{3kT/,}$. Note that there is zero probability of finding a particle with zero speed!
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.75]{Graphics/maxwellian_dist.png}
+\includegraphics[scale=0.6]{Graphics/maxwellian_dist.png}
 \end{figure}
-
-\subsubsection{Gas Properties}
-
-\subsection{Chemically Reacting Mixtures}
-\subsubsection{Equilibrium Coefficient: Statistical Approach}
-\subsubsection{Equilibrium Coefficient: Combined Approach}
-
-\subsection{Kinetic Theory}
-\subsubsection{Molecular Models}
-\subsubsection{Properties}
-\subsubsection{Transport Phenomena}
-\subsubsection{Velocity Distributions}
-\subsubsection{Bimolecular Collisions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1591,9 +1646,43 @@ The solution to a given 1D flame problem is found at the intersection of the Ran
 
 
 \subsubsection{Planar Detonations}
+Planar detonations can be model with the Zeldovich-von Neumann-D\{"o}ring structure, which suggests detonations consist of leading shocks followed by a zone of chemical reactions. This is based on the general idea that collisions which equilibrate pressure and translational energies precede chemical reactions, since their characteristic times differ by orders of magnitude. The leading shock sharply increases the pressure and temperature behind it, reducing the necessary induction time for the reactions to take place. It also makes the post-shock flow subsonic, which is why weak detonations were not permitted (cannot go supersonic again without work). What follows the shock looks much like a deflagration since the flow is subsonic on both sides of the flame.
+
+\begin{figure}[h]\centering\includegraphics[scale=0.8]{Graphics/znd_structure.png}\end{figure}
+
+Solving for the detonation wave speed $D\equiv u_1$ can be done by coupling the CJ constraint $u_2=a_2$ with mass conservation and the solutions from the Rayleigh line. Doing so gives
+\CenteredBoxed{D=\frac{\gamma_2+1}{\gamma}\sqrt{\frac{\gamma_2T_2R_u}{\overline{W}_2}}}
+The $T_2$ factor captures the heat release effect on detonation wave speed, while the average molecular weight $\overline{W}_2$ captures the effect of product composition as well as reactant equivalence ratio.
 
 \subsection{Laminar Premixed Flames}
+Weak deflagrations exist across their whole range, so now we seek to characterize the wave speed for these phenomena. The weak deflagration wave speed is known as the laminar flame speed $S_L^0$.
+\begin{figure}[h]\centering\includegraphics[scale=0.8]{Graphics/laminar_flame_structure.png}\end{figure}
+
 \subsubsection{Laminar Flame Speed}
+Investigating laminar flame speed requires more detailed analyses than were previously employed; control volume analysis is insufficient for understanding how laminar flames actually propagate. We can break down the laminar flame into a basic two-zone structure: the preheat zone and the reaction/heat release zone. The preheat zone precedes any significant reactions; the zone is characterized by heat and species diffusing upstream. This upstream diffusion helps the flame propagate, effectively priming the incoming reactants for the reaction zone, where basically all the heat release happens. Finite gradients exist in this two-zone structure, further emphasizing the importance of diffusive processes in laminar flame propagation.\\
+
+Based on the shape of the Rankine-Hugoniot curve we can assume laminar flames are approximately constant pressure processes ($p_2$ is slightly lower than $p_1$ but we can neglect this for low fidelity analyses). This reduces our conservation equations for mass and momentum, respectively, to
+$$\frac{d(\rho u)}{dx} = 0\quad \frac{d(\rho u u)}{dx} = 0$$
+we must, however, include diffusion in the energy and species conservation equations
+$$\dot m''\frac{dY_i}{dx} = -\frac{dj_{i,x}}{dx} + W_i\dot\omega_i$$
+$$\dot m''c_p\frac{dT}{dx} = \frac{d}{dx}\left(\lambda\frac{dT}{dx}\right) - \sum c_{p,i}j_{i,x}\frac{dT}{dx} - \sum h_i\dot\omega_iW_i$$
+
+\Header{Explanation of Terms}\\
+
+The left hand side of each equation represents convection of said quantity via bulk flow. The first term on the right hand side of the species equation is the gradient of the diffusive mass flux through the flow. The negative sign is there because species' diffuse from high concentrations to low concentrations, so if the gradient of the mass fraction of a species is positive then the gradient (increasing along $x$) of the diffusive velocity is in the negative direction. The second term is the molar production rate times the molecular mass.
+
+The first term on the right hand side of the energy equation is the gradient of the conduction term ($\lambda\equiv k$). The second term is the convection of heat through diffusion (as opposed to that through bulk flow), and the last term is the production rate of enthalpy via chemical reactions.\\
+
+Rearranging the equations and substituting some terms results in the Shvab-Zeldovich energy formulation
+$$\frac{d}{dx}\left[\dot m''Y_i - \rho D\frac{dY_i}{dx}\right] = W_i\dot\omega_i$$
+$$\frac{d}{dx}\left[\dot m''h_s -\rho\alpha\frac{dh_s}{dx}\right] = -\sum\Delta h_{f,i,T_{ref}}^0 \dot\omega_iW_i$$
+The Shvab-Zeldovich formulation uses the definition $\alpha = \lambda/(\rho c_p)$ and assumes calorically perfect gases such that $c_pdT = dh_s$. The diffusive term is dropped from the energy equation (why???). The species equation is modified with the relationship between the diffusive mass flux and the concentration gradient $j_i = \rho D(dY_i/dx)$. The mass flux $\dot m''$ is constant at any cross section by the conservation of mass principle.
+
+The problem can be further simplified by assuming single-step chemistry $\sum\nu'_iM_i\to\sum\nu''_iM_i$ with reaction rate $RR$, which simplifies the species production and heat release rates
+$$\dot\omega_iW_i = (\nu''_i-\nu'_i)RR$$
+$$-\sum\Delta h_{f,i,T_{ref}}^0\dot\omega_i = \Delta h_{r,T_{ref}}RR$$
+
+
 \subsubsection{Flame Thickness}
 \subsubsection{Stretch Effects and Speed Measurements}
 \subsubsection{Propagation Limits and Flame Stabilization}
