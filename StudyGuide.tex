@@ -5,7 +5,7 @@
 \usepackage[margin = 0.75in]{geometry}
 \usepackage{graphicx, subcaption, wrapfig, epstopdf}
 \usepackage{amsmath, amssymb, gensymb, tabularx, multirow, esint, indentfirst}
-\usepackage{mathtools, bm}
+\usepackage{mathtools, bm, enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage[super]{nth}
 \usepackage[hidelinks]{hyperref}
@@ -1183,152 +1183,6 @@ Therefore the overall pressure equilibrium constant is equal to the product of t
 
 For a mixture of $m$ species (compounds), consisting of $\alpha$ atomic nuclei, there are $m+2$ unknowns (need 2 thermodynamic properties). If the thermodynamic properties are specified along with the number or ratio of each atomic nuclei then there remain $m-\alpha$ unknowns, which can be found by using $m-\alpha$ independent $K_p$ expressions. This will set up a linear system which can be solved with appropriate techniques.
 
-\subsection{Worked Examples in Classical Thermodynamics}
-\begin{itemize}
-\Problem{1} Consider the system in the figure below. Determine how much heat would need to be added to the saturated water liquid-vapor mixture to make the mass $m_1$ reach the top of the cylinder (i.e raise it by $h$).
-\begin{figure}[h]\center\includegraphics[scale=0.5]{Graphics/mass_system.PNG}\end{figure}
-
-\emph{Tentative workthrough}: Assume the system is initially in equilibrium and that the piston is well-insulated (with the exception of the heat source, of course). (For the sake of being thorough we should also assume the string connecting the masses does not stretch and the pulleys are frictionless.) Then the pressure inside the cylinder is
-$$p_{in} = p_{ext} + \frac{4(m_1-m_2)g}{\pi d^2}$$
-Assume the process is quasi-static, which means it happens slowly and the interior of the piston rapidly adapts to changes in temperature or volume as heat is added. Thus we can assume the pressure inside the piston is constant throughout the process and
-$$dH = \delta Q\to \Delta H = Q_{in}$$
-Since we have saturated water we can express the enthalpy difference between the initial and final states as the enthalpy of vaporization times the mass of water vaporized, which can in turn be expressed in terms of a change in quality
-$$\Delta H = m_{vap}h_{fg} = mh_{fg}\Delta x = Q_{in}$$
-Similarly, we find the volume change of the the saturated water, which we require to equal to the volume displaced
-$$\Delta V = mv_{fg}\Delta x = \frac{1}{4}\pi d^2h$$
-Solving either expression for the change in quality and subsituting gives
-\CenteredBoxed{Q_{in} = \frac{h_{fg}}{v_{fg}}\frac{1}{4}\pi d^2h}
-Recall that phase changes are both constant pressure and constant temperature (see a $p-v$ diagram), so the (initial) temperature and pressure dependencies are hidding inside the $h_{fg}$ and $v_{fg}$ terms. Of course, this expression needs to be sanity checked against the overall quality $x_0+\Delta x \leq1$. If the calculated value for the final quality exceeds 1 then superheated gas data is needed to solve the problem.\\
-
-\Problem{2} Write the concentration rate equations for each species (except $M$) in the below mechanism
-\begin{align*}
-A_2 + M &\leftrightharpoons A + A + M & (1)\\
-B_2 + M &\leftrightharpoons AB + B & (2)
-\end{align*}
-
-\emph{Workthrough}:
-$$\frac{d[A_2]}{dt} = -k_{1,f}[A_2][M] + k_{1,r}[A]^2[M]$$
-$$\frac{d[B_2]}{dt} = -k_{2,f}[B_2][A] + k_{2,r}[AB][B] = -\frac{d[AB]}{dt} = -\frac{d[B]}{dt}$$
-$$\frac{d[A]}{dt} = 2(k_{1,f}[A_2][M] - k_{1,r}[A]^2[M]) -k_{2,f}[B_2][A] + k_{2,r}[AB][B]$$
-
-\emph{What happens when we apply partial equilibrium to the second reaction? What does that mean physically?} Applying partial equilibrium to the second reaction means the ratio of the forward and reverse rates is constant, and that constant is the equilibrium concentration coefficient
-$$K_{C,2} = \frac{k_{2,f}}{k_{2,r}} = \frac{[AB][B]}{[B_2][A]}$$
-This approximation is typically applied to energy-neutral reactions which achieve equilibrium rapidly, adapting quickly to changes in concentrations caused by other reactions.
-
-\emph{What happens when we apply the steady state approximation to species A? What does that mean physically?} Applying the steady state approximation to $A$ means the $d[A]/dt\to0$, which reduces the last rate equation (above) to an algebraic one. This approximation is applied to species for which the production and destruction rates are approximately equal, though this does not imply the concentration of $A$ is constant.
-
-\Problem{3} Consider the one-way reaction $A+B\to C$ with a reaction rate given by $RR = k[A][B]\exp\left(E_A/RT\right)$. Plot the concentration of products as a function of time for two conditions: $E_A/R <<T$ and $E_A/R >>T$.
-
-\emph{Workthrough}:\\
-Assuming the reaction is exothermic, the pressure is moderate, and the temperature is around typical combustion temperatures (maybe 1500K?), the first case will see the concentration of $C$ rise from the get-go and slowly taper off to its equilibrium concentration. The second case will have a prolonged induction period, then rise much like the first case to reach the equilibrium concentration.
-
-\emph{Find an expression for the concentration of A as a function of time if the activation energy is zero and the initial concentrations of the reactants are equal.} The zero activation energy gives us
-$$\frac{d[C]}{dt} = k[A](t)[B](t)$$
-while the equal initial concentration condition gives
-$$[A](t)=[B](t)\to\frac{d[C]}{dt} = k\left([A](t)\right)^2$$
-We can also equate the production of $C$ with the destruction of $A$, giving us the ODE
-$$\frac{d[A]}{dt} = -k\left([A](t)\right)^2$$
-Separation of variables, integration, application of limits and some rearranging yields
-\CenteredBoxed{[A](t) = \frac{[A]_0}{1+k[A]_0t}}
-
-\emph{Find a suitable chemical time.} The chemical time is defined such that 
-$$\frac{[A](\tau_{chem})}{[A]_0}=\frac{1}{e}$$
-$$\frac{[A]_0/(1+k[A]_0\tau_{chem})}{[A]_0}=\frac{1}{e}$$
-\CenteredBoxed{\tau_{chem} = \frac{e-1}{k[A]_0}\propto\frac{1}{k[A]_0}}
-
-\Problem{4} Consider the dissociation reaction $CO_2\to CO+O$. Compare the \emph{initial} rates of $CO$ production at low and high pressures.\\
-
-\emph{Workthrough}:\\
-Break down the global reaction into a three step mechanism with an activated complex
-\begin{align*}
-CO_2 + M &\to CO_2^* + M & (1)\\
-CO_2^* + M &\to CO_2 + M & (2)\\
-CO_2^* &\to CO + O & (3)
-\end{align*}
-Then apply the steady state approximation to the activated complex, which allows us to reduce its rate equation as follows
-$$\frac{d[CO_2^*]}{dt} = k_1[CO_2][M] - k_2[CO_2^*][M] - k_3[CO_2^*] = 0$$
-$$[CO_2^*] = \frac{k_1[CO_2][M]}{k_2[M] + k_3}$$
-Substitute this into the rate equation for $CO$ gives
-$$\frac{d[CO]}{dt} = k_3[CO_2^*] = \frac{k_1k_3[CO_2][M]}{k_2[M] + k_3} = \frac{k_1[M]}{1+\frac{k_2}{k_3}[M]}[CO_2] = k_g[CO_2]$$
-Now we employ $[M]\propto p$. At low pressures the denominator goes to 1 and the global reaction rate looks like $k_1[M]$, while at high pressures the second term in the denominator dominates and the global reaction rate looks like $k_1k_3/k_2$.
-
-\Problem{5} Define chemical potential without an equation. What is it physically? Why does it matter?\\
-
-Chemical potential is the free energy (or enthalpy) added to a system by adding one unit of a substance to it. Physically, it represents the additional capacity for work supplied by the added medium. It is important because it provides a general condition for equilibrium: minimization of the chemical potential.
-
-\Problem{6} Show that the specific heats of a perfect gas are only functions of temperature\\
-
-Start from the definition of chemical potential
-$$\mu(p,T) = \hat g(p,T) = \hat h - T\hat s$$
-$$\mu^0(T) + RT\ln(p) = \hat h - T\hat s$$
-$$\mu^0(T) + RT\ln(p) = \hat h - T\left(\frac{d\mu^0}{dT} + R\ln(p)\right)$$
-\CenteredBoxed{\hat h = \mu^0(T) + T\frac{d\mu^0}{dT}}
-$$\hat u = \hat h - p\hat v = \hat h - RT$$
-\CenteredBoxed{\hat u = \mu^0(T) + T\left(\frac{d\mu^0}{dT} + R\right)}
-
-Mayer's relation is a direct consequence of these derivations
-\CenteredBoxed{\hat c_p - \hat c_v = R}
-This result can also be obtained from the compressibility coefficients
-$$\alpha = \frac{1}{V}\PartialConst{V}{T}{p} = \frac{1}{T}$$
-$$\kappa = \frac{-1}{V}\PartialConst{V}{p}{T} = \frac{1}{p}$$
-\CenteredBoxed{\hat c_p - \hat c_v = \frac{T\alpha^2\hat v}{\kappa} = \frac{p\hat v}{T} = R}
-
-\Problem{7} Two gases, $A$ and $B$, are contained in a well-insulated box, separated by an impermeable membrane. The temperature, pressure, moles of gas, and initial volumes are all known. The gases are allowed to mix and heat is removed from the system. Determine the final temperature and pressure, the change in entropy, and the change in Gibbs free energy.\\
-
-\emph{Assumptions}: The gases are ideal and calorically perfect. The molar specific heats of the gases are known. The surroundings act as an isothermal resevoir at some known temperature $T_{ext}$.\\
-
-The final temperature can be found by energy balance of the isolated system
-$$n_A\hat c_{v_A}(T_f-T_A) + n_B\hat c_{v_B}(T_f-T_B) + Q_{out} = 0$$
-\CenteredBoxed{T_f = \frac{-Q_{out} + n_A\hat c_{v_A}T_A + n_B\hat c_{v_B}T_B}{n_A\hat c_{v_A} + n_B\hat c_{v_B}}}
-The final pressure can then be found by applying the ideal gas law
-\CenteredBoxed{p_f = \frac{(n_A+n_B)RT_f}{V_A+V_B}}
-
-The entropy generation can be found by breaking down the process into three processes: isochoric thermal equilibration, isothermal mechanical equilibration, and heat extraction. The general expression for the differential entropy is given for clarity.
-$$ S = S(U,V) \to dS = \PartialConst{S}{U}{V}dU + \PartialConst{S}{V}{U}dV$$
-$$dS = \frac{\partial Q}{T} + \frac{p}{T}dV = \frac{c_V}{T}dT + \frac{nR}{V}dV$$
-The isochoric thermal equilibration (i.e. heat transfer across the impermeable membrane with $dV = 0$) gives
-$$dS = dS_A + dS_B = \frac{\partial Q}{T}\Big|_A + \frac{\partial Q}{T}\Big|_{B}$$
-Integration between the two states, recognizing that the heat transfered from one gas must go to the other gas and employing the calorically perfect assumption gives
-$$\Delta S_{therm} = n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right)$$
-Now allow the gases to mix isothermally ($dT = 0$)
-$$\Delta S_{mech} = n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right)$$
-Finally, extract heat from the system to the surroundings (exactly how this is achieved is not important), accounting for the entropy changes in both gases as well as in the resvoir.
-$$\Delta S_{heat} = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}$$
-Put it all together to get the total entropy change
-\begin{align*}
-\Delta S =& \Delta S_{therm} + \Delta S_{mech} + \Delta S_{heat} \\
-=& n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right)+ n_BR_u\ln\left(\frac{V_f}{V_B}\right) \\
-& + n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}
-\end{align*}
-
-A shorthand approach to this would be to apply the $TdS$ relations to each gas independently, recognizing the rules of logarithms to simplify the expression
-\CenteredBoxed{\Delta S = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_A}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_B}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right) + \frac{Q_{out}}{T_{ext}}}
-
-The initial Gibbs free energy is the sum of the two gases which, applying the ideal gas assumption, is equal to the chemical potential times the number of moles
-$$G_{sys,init} = G_A + G_B = n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))$$
-where it is assumed $\mu^0$ is taken at the reference pressure of 1 with units consistent with the units of the pressure term(s). After mixing, the temperatures of the gases change and the partial pressure of each gas may change. So the Gibbs function after mixing is given by
-$$G_{sys,mixed} = G_A + G_B = n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))$$
-Thus the change in the Gibbs function between the starting and ending points of the whole process is
-\begin{align*}
-\Delta G_{sys} =& G_{sys,mixed} - G_{sys,init}\\
-=& n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))\\
-&- \left(n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))\right)
-\end{align*} 
-
-\Problem{8} How would you modify a premixed combustion process (i.e. hardware is fixed but properties are variable) when the fuel is switched from methane to decane?\\
-
-You would want to increase the residence time and increase the inlet temperature. Increasing the residence time can be achieved by slowing down the mass flow rate of premixed fluid, while increasing the inlet temperature can be achieved by some preheating method. You would want to do this because decane is significantly heavier than methane; $C_{10}H_{22}$ for $n$-decane has a molar mass of $10\times12 + 22\times1 = 144$ vs $CH_4$ for methane which has a molar mass of 16. The higher mass means lower diffusivity, so it does not mix as readily with the rest of the fluid. This, in turn, limits the reaction rates (chemical kinetics). That limitation can be overcome by simply allowing more time for the reactions to happen and by increasing the temperature, which increases the overeall energy and the collision frequency. You may also want to shift the stoichiometry towards the slightly rich condition; this will increase the heat released by the reactions, which facilitates the overall process in a manner similar to increasing the inlet temperature.
-
-\Problem{9} Write the (pressure) equilibrium constant for the reaction 
-$$aA + bB \to cC$$
-
-\CenteredBoxed{K_p = \frac{\chi_C^c}{\chi_A^a\chi_B^b}p^{(c-(a+b))}}
-
-In general, is $K_p$ a function of pressure? Justify your answer.\\
-
-$K_p$ is purely a function of temperature, even though pressure may show up on the right hand side of the above equation. The fact that it is purely a function of temperature can be seen by deriving $K_p$ from the chemical potential of the mixture. The physical manifestation of this independence is that $K_p$ does not itself respond to changes in pressure; the ratio of mole fractions, raised to the powers of the stoichiometric coefficients, will adjust as pressure is changed such that the above equation holds for a a given, fixed $K_p$ at a given, fixed temperature.
-\end{itemize}
-
 \subsection{Quantum Theory and Wave Mechanics}
 \subsubsection{Bohr Model of the Atom}
 After observing the discrete emission spectra for hydrogen atoms, Bohr postulated the following model for the atomic structure:
@@ -1701,6 +1555,196 @@ $$-\sum\Delta h_{f,i,T_{ref}}^0\dot\omega_i = \Delta h_{r,T_{ref}}RR$$
 \subsubsection{Premixed Turbulent Flows}
 
 \subsubsection{Non-Premixed Turbulent Flows}
+\newpage
+\section{Worked Problems in Thermodynamics and Combustion}
+\begin{itemize}
+\Problem{1} Consider the system in the figure below. Determine how much heat would need to be added to the saturated water liquid-vapor mixture to make the mass $m_1$ reach the top of the cylinder (i.e raise it by $h$).
+\begin{figure}[h]\center\includegraphics[scale=0.5]{Graphics/mass_system.PNG}\end{figure}
+
+\emph{Tentative workthrough}: Assume the system is initially in equilibrium and that the piston is well-insulated (with the exception of the heat source, of course). (For the sake of being thorough we should also assume the string connecting the masses does not stretch and the pulleys are frictionless.) Then the pressure inside the cylinder is
+$$p_{in} = p_{ext} + \frac{4(m_1-m_2)g}{\pi d^2}$$
+Assume the process is quasi-static, which means it happens slowly and the interior of the piston rapidly adapts to changes in temperature or volume as heat is added. Thus we can assume the pressure inside the piston is constant throughout the process and
+$$dH = \delta Q\to \Delta H = Q_{in}$$
+Since we have saturated water we can express the enthalpy difference between the initial and final states as the enthalpy of vaporization times the mass of water vaporized, which can in turn be expressed in terms of a change in quality
+$$\Delta H = m_{vap}h_{fg} = mh_{fg}\Delta x = Q_{in}$$
+Similarly, we find the volume change of the the saturated water, which we require to equal to the volume displaced
+$$\Delta V = mv_{fg}\Delta x = \frac{1}{4}\pi d^2h$$
+Solving either expression for the change in quality and subsituting gives
+\CenteredBoxed{Q_{in} = \frac{h_{fg}}{v_{fg}}\frac{1}{4}\pi d^2h}
+Recall that phase changes are both constant pressure and constant temperature (see a $p-v$ diagram), so the (initial) temperature and pressure dependencies are hidding inside the $h_{fg}$ and $v_{fg}$ terms. Of course, this expression needs to be sanity checked against the overall quality $x_0+\Delta x \leq1$. If the calculated value for the final quality exceeds 1 then superheated gas data is needed to solve the problem.\\
+
+\Problem{2} Write the concentration rate equations for each species (except $M$) in the below mechanism
+\begin{align*}
+A_2 + M &\leftrightharpoons A + A + M & (1)\\
+B_2 + M &\leftrightharpoons AB + B & (2)
+\end{align*}
+
+\emph{Workthrough}:
+$$\frac{d[A_2]}{dt} = -k_{1,f}[A_2][M] + k_{1,r}[A]^2[M]$$
+$$\frac{d[B_2]}{dt} = -k_{2,f}[B_2][A] + k_{2,r}[AB][B] = -\frac{d[AB]}{dt} = -\frac{d[B]}{dt}$$
+$$\frac{d[A]}{dt} = 2(k_{1,f}[A_2][M] - k_{1,r}[A]^2[M]) -k_{2,f}[B_2][A] + k_{2,r}[AB][B]$$
+
+\emph{What happens when we apply partial equilibrium to the second reaction? What does that mean physically?} Applying partial equilibrium to the second reaction means the ratio of the forward and reverse rates is constant, and that constant is the equilibrium concentration coefficient
+$$K_{C,2} = \frac{k_{2,f}}{k_{2,r}} = \frac{[AB][B]}{[B_2][A]}$$
+This approximation is typically applied to energy-neutral reactions which achieve equilibrium rapidly, adapting quickly to changes in concentrations caused by other reactions.
+
+\emph{What happens when we apply the steady state approximation to species A? What does that mean physically?} Applying the steady state approximation to $A$ means the $d[A]/dt\to0$, which reduces the last rate equation (above) to an algebraic one. This approximation is applied to species for which the production and destruction rates are approximately equal, though this does not imply the concentration of $A$ is constant.
+
+\Problem{3} Consider the one-way reaction $A+B\to C$ with a reaction rate given by $RR = k[A][B]\exp\left(E_A/RT\right)$. Plot the concentration of products as a function of time for two conditions: $E_A/R <<T$ and $E_A/R >>T$.
+
+\emph{Workthrough}:\\
+Assuming the reaction is exothermic, the pressure is moderate, and the temperature is around typical combustion temperatures (maybe 1500K?), the first case will see the concentration of $C$ rise from the get-go and slowly taper off to its equilibrium concentration. The second case will have a prolonged induction period, then rise much like the first case to reach the equilibrium concentration.
+
+\emph{Find an expression for the concentration of A as a function of time if the activation energy is zero and the initial concentrations of the reactants are equal.} The zero activation energy gives us
+$$\frac{d[C]}{dt} = k[A](t)[B](t)$$
+while the equal initial concentration condition gives
+$$[A](t)=[B](t)\to\frac{d[C]}{dt} = k\left([A](t)\right)^2$$
+We can also equate the production of $C$ with the destruction of $A$, giving us the ODE
+$$\frac{d[A]}{dt} = -k\left([A](t)\right)^2$$
+Separation of variables, integration, application of limits and some rearranging yields
+\CenteredBoxed{[A](t) = \frac{[A]_0}{1+k[A]_0t}}
+
+\emph{Find a suitable chemical time.} The chemical time is defined such that 
+$$\frac{[A](\tau_{chem})}{[A]_0}=\frac{1}{e}$$
+$$\frac{[A]_0/(1+k[A]_0\tau_{chem})}{[A]_0}=\frac{1}{e}$$
+\CenteredBoxed{\tau_{chem} = \frac{e-1}{k[A]_0}\propto\frac{1}{k[A]_0}}
+
+\Problem{4} Consider the dissociation reaction $CO_2\to CO+O$. Compare the \emph{initial} rates of $CO$ production at low and high pressures.\\
+
+\emph{Workthrough}:\\
+Break down the global reaction into a three step mechanism with an activated complex
+\begin{align*}
+CO_2 + M &\to CO_2^* + M & (1)\\
+CO_2^* + M &\to CO_2 + M & (2)\\
+CO_2^* &\to CO + O & (3)
+\end{align*}
+Then apply the steady state approximation to the activated complex, which allows us to reduce its rate equation as follows
+$$\frac{d[CO_2^*]}{dt} = k_1[CO_2][M] - k_2[CO_2^*][M] - k_3[CO_2^*] = 0$$
+$$[CO_2^*] = \frac{k_1[CO_2][M]}{k_2[M] + k_3}$$
+Substitute this into the rate equation for $CO$ gives
+$$\frac{d[CO]}{dt} = k_3[CO_2^*] = \frac{k_1k_3[CO_2][M]}{k_2[M] + k_3} = \frac{k_1[M]}{1+\frac{k_2}{k_3}[M]}[CO_2] = k_g[CO_2]$$
+Now we employ $[M]\propto p$. At low pressures the denominator goes to 1 and the global reaction rate looks like $k_1[M]$, while at high pressures the second term in the denominator dominates and the global reaction rate looks like $k_1k_3/k_2$.
+
+\Problem{5} Define chemical potential without an equation. What is it physically? Why does it matter?\\
+
+Chemical potential is the free energy (or enthalpy) added to a system by adding one unit of a substance to it. Physically, it represents the additional capacity for work supplied by the added medium. It is important because it provides a general condition for equilibrium: minimization of the chemical potential.
+
+\Problem{6} Show that the specific heats of a perfect gas are only functions of temperature\\
+
+Start from the definition of chemical potential
+$$\mu(p,T) = \hat g(p,T) = \hat h - T\hat s$$
+$$\mu^0(T) + RT\ln(p) = \hat h - T\hat s$$
+$$\mu^0(T) + RT\ln(p) = \hat h - T\left(\frac{d\mu^0}{dT} + R\ln(p)\right)$$
+\CenteredBoxed{\hat h = \mu^0(T) + T\frac{d\mu^0}{dT}}
+$$\hat u = \hat h - p\hat v = \hat h - RT$$
+\CenteredBoxed{\hat u = \mu^0(T) + T\left(\frac{d\mu^0}{dT} + R\right)}
+
+Mayer's relation is a direct consequence of these derivations
+\CenteredBoxed{\hat c_p - \hat c_v = R}
+This result can also be obtained from the compressibility coefficients
+$$\alpha = \frac{1}{V}\PartialConst{V}{T}{p} = \frac{1}{T}$$
+$$\kappa = \frac{-1}{V}\PartialConst{V}{p}{T} = \frac{1}{p}$$
+\CenteredBoxed{\hat c_p - \hat c_v = \frac{T\alpha^2\hat v}{\kappa} = \frac{p\hat v}{T} = R}
+
+\Problem{7} Two gases, $A$ and $B$, are contained in a well-insulated box, separated by an impermeable membrane. The temperature, pressure, moles of gas, and initial volumes are all known. The gases are allowed to mix and heat is removed from the system. Determine the final temperature and pressure, the change in entropy, and the change in Gibbs free energy.\\
+
+\emph{Assumptions}: The gases are ideal and calorically perfect. The molar specific heats of the gases are known. The surroundings act as an isothermal resevoir at some known temperature $T_{ext}$.\\
+
+The final temperature can be found by energy balance of the isolated system
+$$n_A\hat c_{v_A}(T_f-T_A) + n_B\hat c_{v_B}(T_f-T_B) + Q_{out} = 0$$
+\CenteredBoxed{T_f = \frac{-Q_{out} + n_A\hat c_{v_A}T_A + n_B\hat c_{v_B}T_B}{n_A\hat c_{v_A} + n_B\hat c_{v_B}}}
+The final pressure can then be found by applying the ideal gas law
+\CenteredBoxed{p_f = \frac{(n_A+n_B)RT_f}{V_A+V_B}}
+
+The entropy generation can be found by breaking down the process into three processes: isochoric thermal equilibration, isothermal mechanical equilibration, and heat extraction. The general expression for the differential entropy is given for clarity.
+$$ S = S(U,V) \to dS = \PartialConst{S}{U}{V}dU + \PartialConst{S}{V}{U}dV$$
+$$dS = \frac{\partial Q}{T} + \frac{p}{T}dV = \frac{c_V}{T}dT + \frac{nR}{V}dV$$
+The isochoric thermal equilibration (i.e. heat transfer across the impermeable membrane with $dV = 0$) gives
+$$dS = dS_A + dS_B = \frac{\partial Q}{T}\Big|_A + \frac{\partial Q}{T}\Big|_{B}$$
+Integration between the two states, recognizing that the heat transfered from one gas must go to the other gas and employing the calorically perfect assumption gives
+$$\Delta S_{therm} = n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right)$$
+Now allow the gases to mix isothermally ($dT = 0$)
+$$\Delta S_{mech} = n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right)$$
+Finally, extract heat from the system to the surroundings (exactly how this is achieved is not important), accounting for the entropy changes in both gases as well as in the resvoir.
+$$\Delta S_{heat} = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}$$
+Put it all together to get the total entropy change
+\begin{align*}
+\Delta S =& \Delta S_{therm} + \Delta S_{mech} + \Delta S_{heat} \\
+=& n_A\hat c_{V_A}\ln\left(\frac{T_{mix}}{T_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_{mix}}{T_B}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right)+ n_BR_u\ln\left(\frac{V_f}{V_B}\right) \\
+& + n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_{mix}}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_{mix}}\right) + \frac{Q_{out}}{T_{ext}}
+\end{align*}
+
+A shorthand approach to this would be to apply the $TdS$ relations to each gas independently, recognizing the rules of logarithms to simplify the expression
+\CenteredBoxed{\Delta S = n_A\hat c_{V_A}\ln\left(\frac{T_f}{T_A}\right) + n_AR_u\ln\left(\frac{V_f}{V_A}\right) + n_B\hat c_{V_B}\ln\left(\frac{T_f}{T_B}\right) + n_BR_u\ln\left(\frac{V_f}{V_B}\right) + \frac{Q_{out}}{T_{ext}}}
+
+The initial Gibbs free energy is the sum of the two gases which, applying the ideal gas assumption, is equal to the chemical potential times the number of moles
+$$G_{sys,init} = G_A + G_B = n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))$$
+where it is assumed $\mu^0$ is taken at the reference pressure of 1 with units consistent with the units of the pressure term(s). After mixing, the temperatures of the gases change and the partial pressure of each gas may change. So the Gibbs function after mixing is given by
+$$G_{sys,mixed} = G_A + G_B = n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))$$
+Thus the change in the Gibbs function between the starting and ending points of the whole process is
+\begin{align*}
+\Delta G_{sys} =& G_{sys,mixed} - G_{sys,init}\\
+=& n_A(\mu^0_A(T_f) + R_uT_f\ln(\chi_Ap_f)) + n_B(\mu^0_B(T_f) + R_uT_f\ln(\chi_Bp_f))\\
+&- \left(n_A(\mu^0_A(T_A) + R_uT_A\ln(p_A)) + n_B(\mu^0_B(T_B)+R_uT_B\ln(p_B))\right)
+\end{align*} 
+
+\Problem{8} How would you modify a premixed combustion process (i.e. hardware is fixed but properties are variable) when the fuel is switched from methane to decane?\\
+
+You would want to increase the residence time and increase the inlet temperature. Increasing the residence time can be achieved by slowing down the mass flow rate of premixed fluid, while increasing the inlet temperature can be achieved by some preheating method. You would want to do this because decane is significantly heavier than methane; $C_{10}H_{22}$ for $n$-decane has a molar mass of $10\times12 + 22\times1 = 144$ vs $CH_4$ for methane which has a molar mass of 16. The higher mass means lower diffusivity, so it does not mix as readily with the rest of the fluid. This, in turn, limits the reaction rates (chemical kinetics). That limitation can be overcome by simply allowing more time for the reactions to happen and by increasing the temperature, which increases the overeall energy and the collision frequency. You may also want to shift the stoichiometry towards the slightly rich condition; this will increase the heat released by the reactions, which facilitates the overall process in a manner similar to increasing the inlet temperature.
+
+\Problem{9} Write the (pressure) equilibrium constant for the reaction 
+$$aA + bB \to cC$$
+
+\CenteredBoxed{K_p = \frac{\chi_C^c}{\chi_A^a\chi_B^b}p^{(c-(a+b))}}
+
+In general, is $K_p$ a function of pressure? Justify your answer.\\
+
+$K_p$ is purely a function of temperature, even though pressure may show up on the right hand side of the above equation. The fact that it is purely a function of temperature can be seen by deriving $K_p$ from the chemical potential of the mixture. The physical manifestation of this independence is that $K_p$ does not itself respond to changes in pressure; the ratio of mole fractions, raised to the powers of the stoichiometric coefficients, will adjust as pressure is changed such that the above equation holds for a a given, fixed $K_p$ at a given, fixed temperature.
+
+\Problem{10} Of constant volume and constant pressure combustion processes, which would have a higher final temperature? Why?\\
+
+Constant volume combustion would have a higher temperature. The first law applied to an isolated mass of calorically perfect gases is
+$$mc_VdT = \partial Q - pdV$$
+$$mc_V\Delta T = Q_{chem} - p\Delta V$$
+The work done by the gas in expanding at constant pressure takes up some of the energy released by chemical reactions, lessening the magnitude of the right hand side, thereby reducing the final temperature.
+
+\Problem{11} Consider an isolated system of octane and air at stoichiometric proportions. The gases combust completely, so the system now contains only combustion products at the adiabatic flame temperature. Is this process reversible? Can it reverse spontaneously? What if the octane is replaced with methane, again at stoichiometric proportions? What if the gases are hydrogen and oxygen? What if the system were not isolated? Justify your answers.\\
+
+\Problem{12} The cross section of a spherical vessel is shown below. The two hemispheres are initially at 1000 Kelvin and separated by an impermeable membrane. At time $t=0$ the membrane is removed and a spark goes off in the center. Draw and describe the flame for each of the following cases (1a, 1b, 2a, 2b, 3a, 3b):\\
+
+\begin{minipage}{0.48\textwidth}
+\begin{enumerate}
+	\item Fuel is ethane, oxidizer is air
+	\item Fuel is ethane, oxidizer is oxygen
+	\item Fuel is hydrogen, oxidizer is oxygen
+	\end{enumerate}
+	
+	\begin{enumerate}[label=(\alph*)]
+	\item (1) is pure fuel and (2) is pure oxidizer
+	\item (1) is premixed fuel/oxidizer at $\Phi=0.7$ and (2) is premixed fuel/oxidizer at $\Phi=1.6$
+	\end{enumerate}
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+	\centering
+	\includegraphics[width=0.7\textwidth]{Graphics/fuel_ox_sphere.png}
+\end{minipage}
+
+\Problem{13}\\
+\begin{minipage}{0.58\textwidth}
+Consider the propane droplet array shown to the right. The initial temperature of the droplets is 500 Kelvin while the temperature of the surroundings (air) is 1500 Kelvin. Where will the flame start and how will it propagate? You may ignore gravity.
+\end{minipage}
+\begin{minipage}{0.38\textwidth}
+\centering\includegraphics[width=0.7\textwidth]{Graphics/droplet_array.png}
+\end{minipage}
+
+\vspace{1cm}
+The corners will ignite first, then the flame will propagate along the edges and eventually close over the top. The edges ignite first because they are the hottest. The droplets must evaporate before a diffusion flame can start, and evaporation takes energy; the droplets near the middle are all absorbing heat to evaporate and the cooling of the oxidizer around them increases the local induction time. The droplets on the end, however, experience less local temperature suppression and so have a less-impacted autoignition delay. Once the four corners go, the heat from those flames diffuses into the neighboring droplets; the edge droplets have an autoignition delay somewhere between those of the corners and the center. The flame then makes its way in towards the center from all edges as the necessary induction time is exceeded and heat from the flames diffuses inward.
+
+Despite the importance of diffusion, this is not really a diffusion problem. The dominant effect is the heat required to evaporate the fuel droplets, and how that heat of vaporization impacts the induction time. Species diffusion becomes important once the flame is initiated, but not necessarily leading up to ignition.
+
+
+
+\end{itemize}
 
 \end{document}
 
