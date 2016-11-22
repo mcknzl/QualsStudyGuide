@@ -18,6 +18,8 @@
 \usepackage [english]{babel}
 \usepackage [autostyle, english = american]{csquotes}
 \MakeOuterQuote{"}
+\newsavebox{\fmbox}
+\newenvironment{fmpage}[1]{\begin{lrbox}{\fmbox}\begin{minipage}{#1}}{\end{minipage}\end{lrbox}\fbox{\usebox{\fmbox}}}
 %% Aero commands
 \newcommand{\rhoinfty}{\rho_\infty}
 \newcommand{\Vinfty}{V_\infty}
@@ -79,7 +81,7 @@
 	\item Start from general momentum equation $\rho\frac{Du}{Dt} = \sum F''' = -\frac{\partial p}{\partial x}+ \rho f_x + f_v$, ignoring body and viscous forces. Assume, without loss of generality, we are in the $x$ direction
 	\item Write out substantial derivative $\rho\frac{Du}{Dt} = \rho\left(\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} + v\frac{\partial u}{\partial y} + w\frac{\partial u}{\partial z}\right)$. Assuming steady flow $\frac{\partial u}{\partial t} = 0$
 	\item Substitute, multiply both sides by $dx$, and simplify by applying to a stream (such that $udz=wdx$ and $udy=vdx$) to get $u\left(\frac{\partial u}{\partial x}dx+\frac{\partial u}{\partial y}dy+\frac{\partial u}{\partial z}dz\right)=\frac{-1}{\rho}\frac{\partial p}{\partial x}dx$
-	\item Recognize the term in parentheses on the right hand side is the differential of the $x$-component of the velocity $du = \frac{\partial u}{\partial x}dx+\frac{\partial u}{\partial y}dy+\frac{\partial u}{\partial z}dz$
+	\item Recognize the term in parentheses on the left hand side is the differential of the $x$-component of the velocity $du = \frac{\partial u}{\partial x}dx+\frac{\partial u}{\partial y}dy+\frac{\partial u}{\partial z}dz$
 	\item Substitute to get $udu = \frac{-1}{\rho}\frac{\partial p}{\partial x}dx$
 	\item Repeat for $y$ and $z$ directions
 	\item Recognize the sum of squares of the velocity components is the square of the velocity itself ($u^2+v^2+w^2=V^2$)
@@ -92,25 +94,25 @@
 	\CenteredBoxed{p+\frac{1}{2}\rho V^2 = const.}
 	\item Bernoulli's equation applies to any individual stream line, indepent of whether or not the flow is rotational. In the special case of irrotational flow ($\nabla\times V = 0$) the constant is the same for each streamline, thus Bernoulli's equation holds for the entire flow field, not just a streamline.
 	\end{itemize}
-\Item{Irrotational Flow} A flow is irrotational if individual fluid elements do not rotate about their centers of gravity; the fluid elements poses no angular velocity and their motion through space is pure translation ($\nabla\times V = 0$ throughout the fluid). Inviscid flow may be either rotational or irrotational. Viscous flow must be rotational.
+\Item{Irrotational Flow} A flow is irrotational if individual fluid elements do not rotate about their centers of gravity; the fluid elements posses no angular velocity and their motion through space is pure translation ($\nabla\times V = 0$ throughout the fluid). Inviscid flow may be either rotational or irrotational. Viscous flow must be rotational, thus all \emph{real} flows are rotational; irrotational flow is an idealization used to simplify analyses.
 \Item{Circulation} $\Gamma\equiv-\oint V\cdot ds=\varointclockwise V\cdot ds$ (circulation is taken to be positive clockwise for convenience). Circulation does \emph{not} imply the fluid elements are doing circuits; rather, circulation in the context of aerodynamics means the closed-loop integral is finite. Applying Stoke's theorem yields $-\frac{d\Gamma}{dS} = (\nabla\times V)\cdot\mathbf{n}$ where $\mathbf{n}$ is the normal to the open surface which bounds the curve around which $V\cdot ds$ is integrated.
 \Item{Stream Function} Two-dimensional steady flow yields the equation $\frac{dy}{dx} = \frac{v}{u}$ for a streamline. With $v$ and $u$ known functions of $x$ and $y$, we can write the stream function $\bar{\psi}(x,y) = c$
 	\begin{itemize}
 	\item Since the velocity vector at any point is tangent to the stream line at that point (i.e. there is no normal velocity) the mass flux between any two stream lines must remain constant throughout the flow field (for incompressible flow). This means local velocity is inversely proportional to stream line spacing at any point in the flow
 	\item We can also deduce the following
 	$$ \Delta\bar{\psi}\equiv\rho V\Delta n(unit\ depth\ into\ page)$$
-	$$\lim_{\Delta n\to0}\frac{\Delta\bar{\psi}}{\Delta n}\equiv\frac{\partial\bar{\psi}}{\partial n} = \rho V$$
+	$$\lim_{\Delta n\to0}\frac{\Delta\bar{\psi}}{\Delta n}\equiv\Partial{\bar\psi}{n} = \rho V$$
 	$$\textrm{Conservation of mass}\implies\rho V\Delta n = \rho u\Delta y - \rho v\Delta x$$
-	$$d\bar{\psi} = \rho udy - \rho vdy$$
-	$$\textrm{By the chain rule}\ \bar{\psi} = \bar{\psi}(x,y) \implies d\bar{\psi} = \frac{\partial\bar{\psi}}{\partial x}dx + \frac{\partial\bar{\psi}}{\partial y}dy$$
-	\CenteredBoxed{\rho u = \frac{\partial\bar{\psi}}{\partial x}\to u=\frac{\partial\psi}{\partial x},\quad \rho v = -\frac{\partial\bar{\psi}}{\partial y}\to v=-\frac{\partial\psi}{\partial y}}
-	\item Polar coordinates: $u_r=\frac{1}{r}\frac{\partial\psi}{\partial \theta}$, $u_\theta=-\frac{\partial\psi}{\partial r}$
+	$$d\bar{\psi} = \rho udy - \rho vdx$$
+	$$\textrm{By the chain rule}\ \bar{\psi} = \bar{\psi}(x,y) \implies d\bar{\psi} = \Partial{\bar\psi}{x}dx + \Partial{\bar\psi}{y}dy$$
+	\CenteredBoxed{\rho u = \Partial{\bar\psi}{y}\to u=\Partial{\psi}{y},\quad \rho v = -\Partial{\bar\psi}{x}\to v=-\Partial{\psi}{x}}
+	\item Polar coordinates: $u_r=\frac{1}{r}\Partial{\psi}{\theta}$, $u_\theta=-\Partial{\psi}{r}$
 	\end{itemize}
 \Item{Velocity Potential} If $\xi = \nabla\times V = 0$ then $\exists\phi=\phi(x,y,z):\mathbb{R}^3\to\mathbb{R}\ s.t.\ \nabla\times(\nabla\phi)=0$ and $V=\nabla\phi$
 	\begin{itemize}
-	\item As a direct consequence, $u=\frac{\partial\phi}{\partial x}$, $v=\frac{\partial\phi}{\partial y}$, $w=\frac{\partial\phi}{\partial z}$ (from definition of Cartesian gradient)
-	\item Cylindrical coordinates: $u_r=\frac{\partial\phi}{\partial r}$, $u_\theta=\frac{1}{r}\frac{\partial\phi}{\partial \theta}$, $u_z=\frac{\partial\phi}{\partial z}$
-	\item Spherical coordinates: $u_r=\frac{\partial\phi}{\partial r}$, $u_\theta=\frac{1}{r}\frac{\partial\phi}{\partial \theta}$, $u_\Phi=\frac{1}{r\sin\theta}\frac{\partial\phi}{\partial \Phi}$, 
+	\item As a direct consequence, $u=\Partial{\phi}{x}$, $v=\Partial{\phi}{y}$, $w=\Partial{\phi}{z}$ (from definition of Cartesian gradient)
+	\item Cylindrical coordinates: $u_r=\Partial{\phi}{r}$, $u_\theta=\frac{1}{r}\Partial{\phi}{\theta}$, $u_z=\Partial{\phi}{z}$
+	\item Spherical coordinates: $u_r=\Partial{\phi}{r}$, $u_\theta=\frac{1}{r}\Partial{\phi}{\theta}$, $u_\Phi=\frac{1}{r\sin\theta}\Partial{\phi}{\Phi}$, 
 	\end{itemize}
 \Item{Vortex Sheet Strength} $\Gamma = \intlim{a}{b}\gamma ds$
 	\begin{itemize}
@@ -166,7 +168,7 @@ For a thin airfoil at a small angle of attack, the camber line $\approx$ chord l
 $$V_{\infty,n} \approx \Vinfty\left(\alpha-\frac{dz}{dx}\right)$$
 Furthermore, the camber line $\approx$ chord line assumption lets us rewrite the induced velocity as
 $$w'(s)\approx w'(x)$$
-By applying the integral form of the velocity induced at a point by a vortex sheet we can write
+By applying the integral form of the velocity induced at a point by a vortex sheet (Biot-Savart Law) we can write
 $$w'(x) = -\intlim{0}{c}\frac{\gamma(\xi)d\xi}{2\pi(x-\xi)}$$
 Substituting the assumptions we've made into the first equation we get\\
 \CenteredBoxed{\Vinfty\left(\alpha-\frac{dz}{dx}\right)=\intlim{0}{c}\frac{\gamma(\xi)d\xi}{2\pi(x-\xi)}}
@@ -215,7 +217,7 @@ This suggests the center of pressure moves to infinity as a cambered airfoil app
 where $m_0=\frac{dc_{m,c/4}}{d\alpha}$ and $a_0=\frac{dc_l}{d\alpha}$. Note the subtle difference between this expression and that for the center of pressure
 \Item{Mean Aerodynamic Chord} A reference value often used as a 2D representation of a 3D wing. Loosely, the MAC is the chord of a rectangular wing with approximately equivalent aerodynamic pitching moment properties as the original wing. The general formula is
 $$MAC =\frac{2}{S}\intlim{0}{b/2}c(y)^2dy$$
-For the special case of a tapered wing
+For the special case of a straight tapered wing
 $$MAC = \frac{2}{3}c_r\frac{1+\lambda+\lambda^2}{1+\lambda}$$
 \Item{Vortex Panel Method} An extension of the vortex sheet method. Apply vortex sheet theory to segments of an arbitrary lifting body (i.e. not just thin airfoils).
 \Item{Skin Friction Coefficient} 
@@ -223,7 +225,7 @@ $$MAC = \frac{2}{3}c_r\frac{1+\lambda+\lambda^2}{1+\lambda}$$
 	\item Laminar: $C_f=\frac{1.328}{\sqrt{Re_c}}$
 	\item Turbulent: $C_f=\frac{0.074}{Re_c^{1/5}}$
 	\end{itemize}
-\Item{Critical Reynolds Number} Transition typically happens around $5\times10^5$ for external flow. Given the flow velocity and assuming typical air properties ($\mu\approx1.8\times10^{-5}\ kg/(ms)$ and $\rhoinfty=1.23\ kg/m^2$), one can find the transition distance $x_{cr}$
+\Item{Critical Reynolds Number} Transition typically happens around $5\times10^5$ for external flow. Given the flow velocity and assuming typical air properties ($\mu\approx1.8\times10^{-5}\ kg/(ms)$ and $\rhoinfty=1.23\ kg/m^2$ at sea level), one can find the transition distance $x_{cr}$
 \Item{Flow Separation} Drastic loss of lift and significant increase in (pressure) drag. Caused by adverse pressure gradients and the flows inability to overcome those gradients. Trailing edge stall is less severe than leading edge stall (albeit with a lower maximum lift coefficient)
 \Item{High Lift Devices} Flaps and slats are the main methods for increasing lift. Without high lift devices, a wing would have to be sized for takeoff and landing (low speed events) and performance would suffer during cruise (high speed condition). More on this later
 \end{itemize}
@@ -336,9 +338,9 @@ $$n=\frac{1}{\cos\phi}\implies\frac{1}{n^2}+\sin^2\phi = 1\implies R_2 = \frac{\
 \CenteredBoxed{\omega=\frac{\Vinfty}{R_2} = \frac{g\sqrt{n^2-1}}{\Vinfty}}
 $$T=D=\qinfty S\left[C_{D,0}+K\left(\frac{nW}{\qinfty S}\right)^2\right]$$
 \CenteredBoxed{n=\left[\frac{\qinfty}{K(W/S)}\left(\frac{T}{W}-\frac{\qinfty C_{D,0}}{W/S}\right)\right]^{1/2}=\left[\frac{\qinfty}{K(W/S)}\frac{P_s}{W}\right]^{1/2}}
-\subsubsection{Range}
 
-\Header{Thrust-Rated Aircraft}
+\subsubsection{Range}
+\textbf{Thrust-Rated Aircraft}
 \CenteredBoxed{R=\left(\frac{L}{D}\right)\left(\frac{\Vinfty}{TSFC}\right)\ln\frac{W_i}{W_f}}
 Maximum Range: Assume $\Vinfty$ varies such that $L=W$ with constant $C_L$
 $$\Vinfty=\sqrt{\frac{W}{\qinfty SC_L}},\ L=\qinfty SC_L,\ D=\qinfty SC_D$$
@@ -346,9 +348,9 @@ $$\Vinfty=\sqrt{\frac{W}{\qinfty SC_L}},\ L=\qinfty SC_L,\ D=\qinfty SC_D$$
 $$\left(\frac{C_L^{1/2}}{C_D}\right)_{max}\implies\frac{d}{dC_L}\frac{C_L^{1/2}}{C_D}=0$$
 $$\frac{d}{dC_L}\frac{C_L^{1/2}}{C_D}=0\implies\frac{1}{2}C_L^{-1/2}(C_{D,0}+KC_L^2)-2C_L^{1/2}(KC_L)=0$$
 $$C_L=\sqrt{\frac{C_{D,0}}{3K}}\implies C_D=\frac{4}{3}C_{D,0}$$
-\CenteredBoxed{\left(\frac{C_L}{C_D}\right)_{\left(\frac{C_L^{1/2}}{C_D}\right)_{max}}=\frac{3}{4}\sqrt{\frac{1}{3KC_{D,0}}}}
+\CenteredBoxed{\left(\frac{C_L^{1/2}}{C_D}\right)_{max}=\frac{3}{4}\left(\frac{1}{3KC_{D,0}^3}\right)^{1/4}}
 
-\Header{Power-Rated Aircraft}
+\textbf{Power-Rated Aircraft}
 \CenteredBoxed{R=\left(\frac{L}{D}\right)\left(\frac{\eta}{c}\right)\ln\frac{W_i}{W_f}}
 Maximum Range:
 \CenteredBoxed{R\propto\frac{C_L}{C_D}}
@@ -356,14 +358,15 @@ $$\left(\frac{C_L}{C_D}\right)_{max}\implies\frac{d}{dC_L}\frac{C_L}{C_D}=0$$
 $$\frac{d}{dC_L}\frac{C_L}{C_D}=0\implies(C_{D,0}+KC_L^2)-2C_L(KC_L)=0$$
 $$C_L=\sqrt{\frac{C_{D,0}}{K}}\implies C_D=2C_{D,0}$$
 \CenteredBoxed{\left(\frac{C_L}{C_D}\right)_{max}=\sqrt{\frac{1}{4KC_{D,0}}}}
+
 \subsubsection{Endurance}
-\Header{Thrust-Rated Aircraft}
+\textbf{Thrust-Rated Aircraft}
 \CenteredBoxed{E=\left(\frac{L}{D}\right)\left(\frac{1}{TSFC}\right)\ln\frac{W_i}{W_f}}
 Maximum Endurance:
 \CenteredBoxed{E\propto\frac{C_L}{C_D}}
 \CenteredBoxed{\left(\frac{C_L}{C_D}\right)_{max}=\sqrt{\frac{1}{4KC_{D,0}}}}
 
-\Header{Power-Rated Aircraft}
+\textbf{Power-Rated Aircraft}
 \CenteredBoxed{E=\left(\frac{L}{D}\right)\left(\frac{\eta}{c\Vinfty}\right)\ln\frac{W_i}{W_f}}
 Maximum Endurance: Assume $\Vinfty$ varies such that $L=W$ with constant $C_L$
 $$\Vinfty=\sqrt{\frac{W}{\qinfty SC_L}},\ L=\qinfty SC_L,\ D=\qinfty SC_D$$
@@ -371,7 +374,7 @@ $$\Vinfty=\sqrt{\frac{W}{\qinfty SC_L}},\ L=\qinfty SC_L,\ D=\qinfty SC_D$$
 $$\left(\frac{C_L^{3/2}}{C_D}\right)_{max}\implies\frac{d}{dC_L}\frac{C_L^{3/2}}{C_D}=0$$
 $$\frac{d}{dC_L}\frac{C_L^{3/2}}{C_D}=0\implies\frac{3}{2}C_L^{1/2}(C_{D,0}+KC_L^2)-2C_L^{3/2}(KC_L)=0$$
 $$C_L=\sqrt{\frac{3C_{D,0}}{K}}\implies C_D=4C_{D,0}$$
-\CenteredBoxed{\left(\frac{C_L}{C_D}\right)_{\left(\frac{C_L^{3/2}}{C_D}\right)_{max}}=\frac{1}{4}\sqrt{\frac{3}{KC_{D,0}}}}
+\CenteredBoxed{\left(\frac{C_L^{3/2}}{C_D}\right)_{max}=\frac{1}{4}\left(\frac{3}{KC_{D,0}^3}\right)^{3/4}}
 
 \Header{Wind Effects}\\
 
