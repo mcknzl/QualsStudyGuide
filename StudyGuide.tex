@@ -1747,25 +1747,42 @@ The corners will ignite first, then the flame will propagate along the edges and
 
 Despite the importance of diffusion, this is not really a diffusion problem. The dominant effect is the heat required to evaporate the fuel droplets, and how that heat of vaporization impacts the induction time. Species diffusion becomes important once the flame is initiated, but not necessarily leading up to ignition.
 
-\Problem{14}
+\Problem{14} An insulated box is divided into three parts of equal volume. One part is filled with $N_A$ molecules of $A$, one part is filled with $N_B$ molecules of $B$, and the third part is a vacuum. Find
+\begin{enumerate}[label = \alph*)]
+\item The ratio of $\Omega$ after removal to $\Omega$ before removal of the partitions
+\item The corresponding entropy change from statistical mechanics and classical thermodynamics
+\end{enumerate}
 
+Assume the two systems are at the same temperature and that the number of molecule sof each gas is reasonably high (i.e. we're talking about moles of gas here, not molecules). Then the volume of each species triples after the partitions are removed, and the expression for $\Omega$ for the most probable macrostate is
+$$\ln(\Omega) \approx \ln(W_{max}) \approx N\ln(V)$$
+so the ratio is
+$$\frac{\Omega_2}{\Omega_1} = \frac{(V_2)^N}{(V_1)^N},\quad \Omega_{sys} = \Omega_A\Omega_B$$
+$$\frac{\Omega_2}{\Omega_1}\Big|_{sys} = \left(\frac{\Omega_2}{\Omega_1}\Big|_A\right)\left(\frac{\Omega_2}{\Omega_1}\Big|_B\right)$$
+$$\textrm{a})\ \frac{\Omega_2}{\Omega_1}\Big|_{sys} = 3^{(N_A+N_B)}$$
 
+The entropy is related to $\Omega$ by
+$$S = k\ln(\Omega)$$
+where $k$ is the Boltzmann constant, so the corresponding entropy change from statistical therodynamics is
+$$\textrm{b.1})\ S_2 - S_1 = k\ln\left(\frac{\Omega_2}{\Omega_1}\right) = k\ln\left(3^{(N_A+N_B)}\right)$$
+while that from classical thermodynamics is
+$$\textrm{b.2})\ S_2 - S_1 = \sum Nk\ln\left(\frac{V_2}{V_1}\right) = (N_A+N_B)k\ln(3)$$
+
+The preceding equations which related $\Omega$ to $V$ and $N$ are
+$$\ln(\Omega)\approx\ln(W_{max})$$
+$$\ln(W_{max}) = N\left(1+\ln\left(\frac{Q}{N}\right)\right)+\beta E$$
+$$Q=V\frac{(8\pi mkT)^{3/2}}{8h^3}$$
+$$S = kN\ln\left(\frac{Q}{N}\right) + kN + \beta E$$
+We assume we're dealing with very large numbers here, so we can make a lot of approximations and drop terms all over the place to arrive at the above solution.
+
+\Problem{15} How would you find the entropy of a system in non-equilibrium?\\
+
+We cannot use any of the Boltzmann statistics because they only apply to systems in equilibrium at high temperatures and moderate pressures. So go with Bose-Einstein or Fermi-Dirac statistics.
+
+\Problem{16} Given the reaction $A+B\leftrightharpoons C$, how can you employ statistical mechanics to determine which way the reaction will proceed?\\
+
+Boils down to maximizing $Q$ (how you can distribute energies)
 
 \end{itemize}
 
 \end{document}
 
-%\begin{table}
-% \begin{center}
-%  \begin{threeparttable}
-%   \caption{Ranges used for normalization of sensor errors}
-%   \label{tab:surrErr}
-%   \begin{tabular}{c c c c}
-%   Sensor & Lower Bound & Upper Bound & Units\\\hline
-%   Accelerometer & 0.1 & 5 & $m/s^2$\\
-%   Gyroscope & 1e-4 & 5e-2 & $rad/s$\\
-%   Airspeed Monitor & 0.5 & 10 & $m/s$
-%   \end{tabular}
-%  \end{threeparttable}
-% \end{center}
-%\end{table}
