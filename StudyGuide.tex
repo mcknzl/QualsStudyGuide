@@ -1782,6 +1782,19 @@ We cannot use any of the Boltzmann statistics because they only apply to systems
 
 Boils down to maximizing $Q$ (how you can distribute energies)
 
+\Problem{17} Is a plug flow reactor a good model for a premixed, 1D, laminar flame? What about counter-flow flames? Explain.\\
+
+No to both. PFRs ignore axial diffusion, which is a critical component of laminar flame analysis, and the stretch effects in counter-flow flames would not be captured.
+
+\Problem{18} How would you set up an analysis of an RQL (rich burn, quick mix, lean burn) combustor using the two reactor models? Explain.
+
+\begin{figure}[h]\centering\includegraphics[width=0.7\textwidth]{Graphics/RQL_network.PNG}\end{figure}
+
+The rich and lean parts would be either plug flow or well-stirred reactors; we don't have a great justification for either at this point. The quick mix section should be a well-stirred reactor with an extremely low residence time so as to not allow any combustion to occur (i.e. rich products and air come in, mix perfect, and go out without any significant reactions taking place).
+
+\Problem{19} Consider the reactor network created for Prolem 18 operating with propane as the fuel at 10 atmospheres. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while mass flow rate and composition remain constant ($\dot m = 5\ kg/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
+$$T_{in}(t) = 1000 + 200\sin(t/10),\quad t\in[0,20\pi]$$
+
 \end{itemize}
 
 \end{document}
