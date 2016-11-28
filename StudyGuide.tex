@@ -1375,7 +1375,7 @@ Typically, the larger effect is to increase the axial velocity and decrease dens
 
 \Header{Conservation of Energy}\\
 
-The right hand side the energy equation represents the transport of heat (energy) in the flow direction via mass (convection). It requires the temperature to remain constant for a non-reacting, adiabatic system, which is expected. For a reacting adiabatic system (i.e. first term on left hand side is zero) the heat released by the reactions must be convected downstream. Alternatively, for an endothermic process, the energy required for the reaction must come from upstream via convection. The lack of a diffusive term -- which would make this a second order ODE -- means the only way heat can move around is by convection.
+The left hand side the energy equation represents the transport of heat (energy) in the flow direction via mass (convection). It requires the temperature to remain constant for a non-reacting, adiabatic system, which is expected. For a reacting adiabatic system (i.e. first term on right hand side is zero) the heat released by the reactions must be convected downstream. Alternatively, for an endothermic process, the energy required for the reaction must come from upstream via convection. The lack of a diffusive term -- which would make this a second order ODE -- means the only way heat can move around is by convection.
 
 Adding or removing heat from the system (i.e. non-zero first term on right hand side) would have a significant impact on the temperature profile. Adding heat could push the mixture to ignition, while removing heat could prevent the mixture from igniting at all. Whether or not either of these things would happen depends on the precise heat flux profile (i.e. volumetric heat flux as a function of axial location) and the inlet conditions.
 
@@ -1420,11 +1420,11 @@ The governing equations are then
 
 \Header{Conservation of Mass}\\
 
-The right hand side is the time rate of change of the mass contained within the reactor, while the left hand side is the difference between the inlet and outlet mass fluxes. This is a direct application of Reynold's Transport Theorem to the control volume enclosing the reactor. Only one inlet is considered because of the well-stirred assumption, which would see the two streams completely and instantaneously mixed upon entering the reactor. The steady assumption drives the difference to zero and thus $\rho V = const.$.
+The left hand side is the time rate of change of the mass contained within the reactor, while the right hand side is the difference between the inlet and outlet mass fluxes. This is a direct application of Reynold's Transport Theorem to the control volume enclosing the reactor. Only one inlet is considered because of the well-stirred assumption, which would see the two streams completely and instantaneously mixed upon entering the reactor. The steady assumption drives the difference to zero and thus $\rho V = const.$.
 
 \Header{Conservation of Energy}\\
 
-The right hand side of the equation is the time rate of change of heat contained within the system (the $\bar c_p$ term is a function of composition, and thus, possibly, a weak function of time). The first term on the right hand side is the difference in enthalpy between the inlet and outlet states. The second term is the enthalpy of formation for each species, in the form of the specific enthalpy and the mass production rate of that species. This accounts for both the destruction of reactants and the formation of products (recall that enthalpy of formation is negative for exothermic reactions and positive for endothermic reactions). The third term is volumetric heat addition, while the last is a work term. We may assume a well-stirred reactor to be isobaric and thus can neglect this term.
+The left hand side of the equation is the time rate of change of heat contained within the system (the $\bar c_p$ term is a function of composition, and thus, possibly, a weak function of time). The first term on the left hand side is the difference in enthalpy between the inlet and outlet states. The second term is the enthalpy of formation for each species, in the form of the specific enthalpy and the mass production rate of that species. This accounts for both the destruction of reactants and the formation of products (recall that enthalpy of formation is negative for exothermic reactions and positive for endothermic reactions). The third term is volumetric heat addition, while the last is a work term. We may assume a well-stirred reactor to be isobaric and thus can neglect this term.
 
 \Header{Conservation of Species}\\
 
@@ -1539,8 +1539,47 @@ The problem can be further simplified by assuming single-step chemistry $\sum\nu
 $$\dot\omega_iW_i = (\nu''_i-\nu'_i)RR$$
 $$-\sum\Delta h_{f,i,T_{ref}}^0\dot\omega_i = \Delta h_{r,T_{ref}}RR$$
 
+If we make the $Le=1$ assumption such that $\rho D = \lambda/c_p$ then we can liken the above equations (i.e. their solutions will be similar). The equation which falls out is
+$$\frac{d}{dx}\left[\dot m''\eta - \rho D\frac{d\eta}{dx}\right] = RR(\eta)$$
+with the boundary conditions
+\begin{align*}
+\eta(-\infty) &= \eta_{unburned} &\eta(\infty) &= \eta_{burned}\\
+\frac{d\eta}{dx}\Big|_{-\infty} &= 0 &\frac{d\eta}{dx}\Big|_{\infty} &= 0
+\end{align*}
+
+An Arrhenius form for the reaction rate gives an exponential dependence on $T$, for which there is no analytic solution. Instead, we break up the flame into two distinct zones -- a preheat zone and a reaction zone -- and solve the ODE in each zone separately with a matching condition at the interface. This division is similar to thermal theory and valid for high activation energy reactions, where things happen suddenly once the critical mass of radicals has built up. For this case, the reaction rate in the preheat zone is zero, while that inside the reaction zone follows the Arrhenius form. Thus the preheat zone is driven purely by diffusion.\\
+
+Integrating the ODE once gives
+$$\rho S_L^o\bar c_p T - \lambda\frac{dT}{dx} = C$$
+Applying the derivative boundary condition at the reactant side gives
+$$C = \rho_1S_L^o\bar c_pT_1$$
+and solving at the interface gives
+$$\lambda\frac{dT}{dx}\Big|_i = \rho_1S_L^o\bar c_p(T_i-T_1)$$
+
+In the reaction zone, diffusive phenomena become much more important than convective ones, so the ODE reduces to
+$$\frac{d}{dx}\left(\lambda\frac{dT}{dx}\right) = -RR\Delta h_{R,T_{ref}}$$
+which, when solved at the interface, gives
+$$\lambda\frac{dT}{dx} = \sqrt{2\Delta h_{R,T_{ref}}\intlim{T_i}{T_2}\lambda RRdT}$$
+
+We can match these two solutions, make some hand-wavy assumptions, and arrive at the following expression for the unstretched laminar flame speed
+\CenteredBoxed{S_L^o = \sqrt{\frac{2\nu_f}{\rho_1Y_{f,1}}\bar\alpha\overline{RR}} \propto\sqrt{\bar\alpha\overline{RR}}\approx\sqrt{\frac{\bar\alpha}{\tau_{chem}}}}
+Some of the aforementioned hand-wavy assumptions are
+\begin{itemize}
+\item The lower limit of the reaction rate integral was replaced with $T_1$. This is okay because we assumed the reaction rate was zero in the preheat zone, so extending the limit into that region actually doesn't add anything to the overall integral. It does, however, let us use an average reaction rate over the \emph{whole} flame, and the multiplication by $\Delta T$ divides out with a term in the denominator
+\item The $\Delta T$ term mentioned above was divided out with the $T_i-T_1$ term from the preheat zone. We replaced $T_i$ here with $T_2$ because of the high activation energy assumption, which implies $T_i\approx T_2$
+\item We can also approximate the overall change in temperature using a mixture specific heat and the enthalpy of reaction for the fuel. Multiplying by masses and dividing by stoichiometric coefficients where appropriate, we can relate this to the mass fraction of fuel in the reactants.
+\item We also employed the $Le=1$ assumption somewhere along the way
+\end{itemize}
 
 \subsubsection{Flame Thickness}
+The thickness of the flame is roughly defined as the sum of the preheat and reaction zones. Definitions vary between authors, but a consistent proportionality is
+$$\delta_f\approx\frac{\alpha}{S_L^o}$$
+This result was obtained by again approximating the temperature at the interface to that of the burned gases and linearizing the temperature profile across the flame
+$$\rho_1S_L^o\bar c_p(T_i-T_1) =\lambda\frac{dT}{dx}\Big|_i\to\rho_1S_L^o\bar c_p(T_2-T_1)=\lambda\frac{T_2-T_1}{\delta_f}$$
+Note that this derivation assumes the preheat zone is much larger than the reaction zone. Turns, on the other hand, assumes the two zones are about the same size and so has a factor of 2 out front. This boils down to the Zeldovich number, which is defined as
+$$Ze =\frac{E_A(T_2-T_1)}{RT_2^2}\approx\frac{\delta_{PH}}{\delta_R}$$
+The Zeldovich number for hydrocarbon flames is on the order of 10, justifying the assumption that reaction zones are thin compared to preheat zones.
+
 \subsubsection{Stretch Effects and Speed Measurements}
 \subsubsection{Propagation Limits and Flame Stabilization}
 
@@ -1790,10 +1829,20 @@ No to both. PFRs ignore axial diffusion, which is a critical component of lamina
 
 \begin{figure}[h]\centering\includegraphics[width=0.7\textwidth]{Graphics/RQL_network.PNG}\end{figure}
 
-The rich and lean parts would be either plug flow or well-stirred reactors; we don't have a great justification for either at this point. The quick mix section should be a well-stirred reactor with an extremely low residence time so as to not allow any combustion to occur (i.e. rich products and air come in, mix perfect, and go out without any significant reactions taking place).
+Perfectly stirred reactors everywhere except for the (optional) burnout zone. This is based on a handful of papers on models of reacting flow CFD, where the PSR model provides a decent estimate of local conditions for large reactor networks. This type of system is typically very turbulent and is aided by recirculation zones for flame holding. It would be preferable to model the entire rich combustion zone as perfectly stirred because of these conditions, rather than as a premixed fluid simply flowing axially. More accurate models put equivalence ratio distributions over the network within the rich zone to emulate the stratified composition which is seen in fuel injection systems. The quick mix region is simply a dump of air, which will be a very turbulent process and we can simply the analysis by assuming no reactions; just an instantaneous, perfect mixing of air with the rich products. The lean combustion zone could possibly be modeled as a PFR, unless there was some new fuel injected into the system or a distribution of equivalence ratios was desired, in which case a network of PSRs would be more appropriate. In the burnout zone we can assume all the hot stuff is just flowing through with no real crazy stuff happening, so a plug flow reactor model is fine. (The burnout zone isn't even totally necessary so we could just leave it out.)
 
-\Problem{19} Consider the reactor network created for Prolem 18 operating with propane as the fuel at 10 atmospheres. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while mass flow rate and composition remain constant ($\dot m = 5\ kg/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
-$$T_{in}(t) = 1000 + 200\sin(t/10),\quad t\in[0,20\pi]$$
+\Problem{19} Consider the reactor network created for Prolem 18 operating with propane as the fuel at 10 atmospheres with each combustion reactor having a volume of 1 $m^3$. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while volumetric flow rate and composition remain constant ($\dot V = 5\ m^3/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
+$$T_{in}(t) = 1000 + 200\cos(t/10),\quad t\in[0,20\pi]$$
+
+Equivalence ratio has very little impact on autoignition delay. The residence time of each reactor, except the mixer, is 0.2 seconds, which is longer than the autoignition delay of propane at 1200 K. So initially there are rich combustion reactants coming out of the rich PSR. The exit temperature of the rich PSR will be around 2000 K. If we make the calorically perfect assumption and assuming the mixture specific heat is very close to that of nitrogen, the inlet temperature to the lean PSR will be around 1500 K. The lean mixture will continue to burn (autoignition delay has dropped since temperature has risen) and the outlet of the lean PSR will be lean products at around 2500 K. The mixture will then move towards equilibrium in the burnout zone, where carbon monoxide will form carbon dioxide and release heat, and nitrogen will react with excess oxygen to form nitric oxide at high temperatures via Zeldovich (or Extended Zeldovich). \\
+
+The temperatures downstream will change with the inlet temperature to the rich PSR. The correlation is not 1:1, however, so the temperatures will decrease slightly less than that of the inlet. The rich mixture may not autoignite at the minimum temperature of 800 K but the fact that there was a flame in the reactor before then may prevent quenching (hysteresis). Propane has a decently high activation energy, in the ballpark of 400 kJ/mol (some sources suggest as high as 700 kJ/mol), so this could be an issue. Look at the two cases separately
+\begin{itemize}
+\Item{Extinguished} If the first PSR quenches then the whole system breaks down. The rich PSR would spit out a cold mixture almost identical to the inlet -- there may be a few reactions -- which would get mixed with air and then pushed into the lean PSR. The temperature going into the lean PSR would be slightly higher, probably around 900 K, since the incoming air is hot. This may or may not be high enough to ignite in the lean zone. Ignition in the lean combustor could be helped by some radical production inside the rich combustor. Going into the burnout zone, the mixture \emph{might} be able to autoignite. As the temperature at the inlet to the rich PSR goes back up, the lean zone will reignite first since it will be helped by radical production in the rich PSR. This will continue until the rich PSR reaches a temperature at which it can ignite, then regular operation resumes.
+\Item{Not Extinguished} If the rich PSR does not quench then the reaction will simply not proceed as far at lower temperatures. The drop in temperature will be more gradual than it would be if it had quenched so it would be unlikely that the lean combustion zone would ever extinguish. Enough radicals and hot(ish) reactants would get pushed into the lean zone to sustain the combustion process. The burnout zone would then be largely unchanged aside from the somewhat reduced temperature. The whole system would then smoothly transition back to the initial conditions as the inlet temperature began to rise again.
+\end{itemize}
+
+\Problem{20}
 
 \end{itemize}
 
