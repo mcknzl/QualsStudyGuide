@@ -1768,7 +1768,7 @@ The work done by the gas in expanding at constant pressure takes up some of the 
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 	\centering
-	\includegraphics[width=0.7\textwidth]{Graphics/fuel_ox_sphere.PNG}
+	\includegraphics[width=0.5\textwidth]{Graphics/fuel_ox_sphere.PNG}
 \end{minipage}
 
 ???????????????????????
@@ -1825,24 +1825,62 @@ Boils down to maximizing $Q$ (how you can distribute energies)
 
 No to both. PFRs ignore axial diffusion, which is a critical component of laminar flame analysis, and the stretch effects in counter-flow flames would not be captured.
 
-\Problem{18} How would you set up an analysis of an RQL (rich burn, quick mix, lean burn) combustor using the two reactor models? Explain.
+\Problem{18} Set up a simple reactor network for the three stages of an RQL combustor. RQL stands for rich combustion, quick mixing, lean combustion. Explain your reasoning.
 
 \begin{figure}[h]\centering\includegraphics[width=0.7\textwidth]{Graphics/RQL_network.PNG}\end{figure}
 
-Perfectly stirred reactors everywhere except for the (optional) burnout zone. This is based on a handful of papers on models of reacting flow CFD, where the PSR model provides a decent estimate of local conditions for large reactor networks. This type of system is typically very turbulent and is aided by recirculation zones for flame holding. It would be preferable to model the entire rich combustion zone as perfectly stirred because of these conditions, rather than as a premixed fluid simply flowing axially. More accurate models put equivalence ratio distributions over the network within the rich zone to emulate the stratified composition which is seen in fuel injection systems. The quick mix region is simply a dump of air, which will be a very turbulent process and we can simply the analysis by assuming no reactions; just an instantaneous, perfect mixing of air with the rich products. The lean combustion zone could possibly be modeled as a PFR, unless there was some new fuel injected into the system or a distribution of equivalence ratios was desired, in which case a network of PSRs would be more appropriate. In the burnout zone we can assume all the hot stuff is just flowing through with no real crazy stuff happening, so a plug flow reactor model is fine. (The burnout zone isn't even totally necessary so we could just leave it out.)
+Perfectly stirred reactors everywhere except for the (optional) burnout zone. This is based on a handful of papers on models of reacting flow CFD, where the PSR model provides a decent estimate of local conditions for large reactor networks. This type of system is typically very turbulent and is aided by recirculation zones for flame holding. It would be preferable to model the entire rich combustion zone as perfectly stirred because of these conditions, rather than as a premixed fluid simply flowing axially. More accurate models put equivalence ratio distributions over the network within the rich zone to emulate the stratified composition which is seen in fuel injection systems. The quick mix region is simply a dump of air, which will be a very turbulent process and we can simplify the analysis by assuming no reactions; just an instantaneous, perfect mixing of air with the rich products. The lean combustion zone could possibly be modeled as a PFR, unless there was some new fuel injected into the system or a distribution of equivalence ratios was desired, in which case a network of PSRs would be more appropriate. In the burnout zone we can assume all the hot stuff is just flowing through with no real crazy stuff happening, so a plug flow reactor model is fine. (The burnout zone isn't even totally necessary so we could just leave it out.) If a true reactor network is not used -- if the rich and lean combustion zones are modeled only by single reactors -- then the quick mix PSR is unnecessary. The effects of mixing can be achieved by merging the two streams at the inlet of the lean PSR, where the $Da=0$ assumption will take care of the mixing for us.
 
-\Problem{19} Consider the reactor network created for Prolem 18 operating with propane as the fuel at 10 atmospheres with each combustion reactor having a volume of 1 $m^3$. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while volumetric flow rate and composition remain constant ($\dot V = 5\ m^3/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
+\Problem{19} Consider the reactor network created for Problem 18 operating with propane as the fuel at 10 atmospheres with each combustion reactor having a volume of 1 $m^3$. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while volumetric flow rate and composition remain constant ($\dot V = 5\ m^3/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
 $$T_{in}(t) = 1000 + 200\cos(t/10),\quad t\in[0,20\pi]$$
 
-Equivalence ratio has very little impact on autoignition delay. The residence time of each reactor, except the mixer, is 0.2 seconds, which is longer than the autoignition delay of propane at 1200 K. So initially there are rich combustion reactants coming out of the rich PSR. The exit temperature of the rich PSR will be around 2000 K. If we make the calorically perfect assumption and assuming the mixture specific heat is very close to that of nitrogen, the inlet temperature to the lean PSR will be around 1500 K. The lean mixture will continue to burn (autoignition delay has dropped since temperature has risen) and the outlet of the lean PSR will be lean products at around 2500 K. The mixture will then move towards equilibrium in the burnout zone, where carbon monoxide will form carbon dioxide and release heat, and nitrogen will react with excess oxygen to form nitric oxide at high temperatures via Zeldovich (or Extended Zeldovich). \\
+Equivalence ratio has very little impact on autoignition delay. The residence time of the rich combustor is 0.2 seconds, which is longer than the autoignition delay of propane at 1200 K. So initially there are rich combustion products coming out of the rich PSR. The exit temperature of the rich PSR will be around 2000 K. If we make the calorically perfect assumption and assuming the mixture specific heat is very close to that of nitrogen, the inlet temperature to the lean PSR will be around 1500 K. The lean mixture will continue to burn (autoignition delay has dropped since temperature has risen) and the outlet of the lean PSR will be lean products at around 2500 K. The mixture will then move towards equilibrium in the burnout zone, where carbon monoxide will form carbon dioxide and release heat, and nitrogen will react with excess oxygen to form nitric oxide at high temperatures via Zeldovich (or Extended Zeldovich). \\
 
 The temperatures downstream will change with the inlet temperature to the rich PSR. The correlation is not 1:1, however, so the temperatures will decrease slightly less than that of the inlet. The rich mixture may not autoignite at the minimum temperature of 800 K but the fact that there was a flame in the reactor before then may prevent quenching (hysteresis). Propane has a decently high activation energy, in the ballpark of 400 kJ/mol (some sources suggest as high as 700 kJ/mol), so this could be an issue. Look at the two cases separately
 \begin{itemize}
-\Item{Extinguished} If the first PSR quenches then the whole system breaks down. The rich PSR would spit out a cold mixture almost identical to the inlet -- there may be a few reactions -- which would get mixed with air and then pushed into the lean PSR. The temperature going into the lean PSR would be slightly higher, probably around 900 K, since the incoming air is hot. This may or may not be high enough to ignite in the lean zone. Ignition in the lean combustor could be helped by some radical production inside the rich combustor. Going into the burnout zone, the mixture \emph{might} be able to autoignite. As the temperature at the inlet to the rich PSR goes back up, the lean zone will reignite first since it will be helped by radical production in the rich PSR. This will continue until the rich PSR reaches a temperature at which it can ignite, then regular operation resumes.
-\Item{Not Extinguished} If the rich PSR does not quench then the reaction will simply not proceed as far at lower temperatures. The drop in temperature will be more gradual than it would be if it had quenched so it would be unlikely that the lean combustion zone would ever extinguish. Enough radicals and hot(ish) reactants would get pushed into the lean zone to sustain the combustion process. The burnout zone would then be largely unchanged aside from the somewhat reduced temperature. The whole system would then smoothly transition back to the initial conditions as the inlet temperature began to rise again.
+\Item{Extinguished} If the first PSR quenches then the whole system breaks down. The rich PSR would spit out a cold mixture almost identical to the inlet -- there may be a few reactions -- which would get mixed with air and then pushed into the lean PSR. The temperature going into the lean PSR would be slightly higher, probably around 900 K, since the incoming air is hot. This may or may not be high enough to ignite in the lean zone. Ignition in the lean combustor could be helped by some radical production inside the rich combustor. Going into the burnout zone, the mixture \emph{might} be able to autoignite. As the temperature at the inlet to the rich PSR goes back up, the lean zone will reignite first since it will be helped by radical production in the rich PSR. This will continue until the rich PSR reaches a temperature at which it can ignite, then regular operation resumes.\\
+\includegraphics[width=0.58\textwidth]{Graphics/RQL_time_axes.PNG}
+\Item{Not Extinguished} If the rich PSR does not quench then the reaction will simply not proceed as far at lower temperatures. The drop in temperature will be more gradual than it would be if it had quenched so it would be unlikely that the lean combustion zone would ever extinguish. Enough radicals and hot(ish) reactants would get pushed into the lean zone to sustain the combustion process. The burnout zone would then be largely unchanged aside from the somewhat reduced temperature. The whole system would then smoothly transition back to the initial conditions as the inlet temperature began to rise again.\\
+\includegraphics[width=0.58\textwidth]{Graphics/RQL_time_axes.PNG}
 \end{itemize}
 
-\Problem{20}
+
+\Problem{20}\\
+\begin{minipage}{0.48\textwidth}
+A rigid spherical vessel initially contains ten moles each of hydrogen and oxygen (diatomics) by mole at 700 K and 1 atm. Nitrogen at 1000 K is added to the system at a constant rate of 0.1 mole per second for 100 seconds. Is the vessel ever at risk of exploding?
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=0.7\textwidth]{Graphics/spherical_H2-O2.PNG}
+\end{minipage}
+
+
+
+\Problem{21} \\
+\begin{minipage}{0.46\textwidth}
+Consider the system to the right. Partitions (1) and (2) are of equal volume ($1\ m^3$) and the membrane which separates them is perfectly conducting on the left side (i.e. it instantaneously maintains thermal equilibrium with the gas on the left side and always has uniform temperature). Analyze the following cases. The bounding box itself may be considered rigid and perfectly insulated and partition (1) may be modeled as a PSR or homogeneous when necessary
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\textwidth]{Graphics/weird_box_system.PNG}
+\end{minipage}
+\begin{enumerate}[label=\alph*)]
+\item Partition (1) is a fixed mass containing premixed hydrogen and oxygen at 1000 K at 10 atm. Partition (2) contains stoichiometric premixed ethane and oxygen at 500 K and 1 atm. Describe how the flame propagates within (2).
+\item Partition (1) initially contains air at 800 K and 1 atm, and a stoichiometric methane-air mixture steadily enters at 800 K with a volumetric flow rate of 10 cubic meters per second. Partition (2) contains a premixed methane-air mixture at 300 K, 10 atm, and $\phi=2$. Draw the mole fractions of $H_2O$ and $CO_2$ within \emph{the entire system} as a function of time.
+\item Partition (1) contains argon at 2000 K and 5 atm. Partition (2) contains stoichiometric methane-air at 1000 K and 10 atm. Sketch the temperature of partition (2) and the entropy of the system versus time.
+\item Partition (1) initially contains nitrogen at 1000 K and 5 atm. Separate streams of carbon monoxide and oxygen steadily enter partition (1) at 0.1 and 0.05 cubic meters per second, respectively. Both inlets are at 1000 K. Partition (2) contains 1 mole each of hydrogen, oxygen, and nitrogen at 300 K and 1 atm. Sketch the $NO$ concentration of each partition versus time.
+\end{enumerate}
+
+\Problem{22} A stoichiometric ethane-air mixture at 298 K and 1 atm flows over a heated triangle in the two configurations shown below. Draw and compare the flames for each configuration with $u_1 = 2\ m/s$ and $u_1 = 10\ m/s$.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Graphics/triangle_flows.PNG}
+\end{figure}
+
+\Problem{23} There are three rectangular ducts: The core duct, at the center, carries rich ethane/air at 500 K and has a length of 0.75 meters; the middle duct carries pure air at 500 K and has a length of 1.5 meters; and the outer duct carries pure ethane at 500 K and has a length of 3 meters. The system is maintained at 1 atmosphere. A hot wire sits inside the core slot at $x=0.5m$. The core velocity $u_1$ is 2.5 meters per second, and the velocities $u_2$ and $u_3$ are such that the volumetric flow rates of each annulus, per unit depth, are equal. Draw the flame(s).
+
+\begin{figure}[h]\centering\includegraphics[width=0.8\textwidth]{Graphics/annular_premixed_burner.PNG}\end{figure}
+
 
 \end{itemize}
 
