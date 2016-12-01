@@ -390,6 +390,13 @@ The climb angle $\theta$ is found as
 $$\theta=\arcsin\left(\frac{T-D}{W}\right)$$
 For turbine-driven aircraft, thrust is (mostly) independent of airspeed. Thus the maximum climb angle occurs at the minimum drag condition. The maximum rate of climb, however, occurs at the minimum required power condition (minimum $D\Vinfty$).
 
+\subsubsection{Thrust Required}
+The first principles derivation of thrust required for steady, level flight comes from force balance
+$$T_R = D\quad L = W$$
+Combining these equations gives
+\CenteredBoxed{T_R = \frac{W}{L/D}}
+From this we see minimum thrust required is proportional to (instantaneous weight) but \emph{independent of altitude}. Altitude indepence is implied by the ratio $L/D\big|_{max}$ being independent of altitude for this simple analysis.
+
 \subsubsection{Power Required}
 \CenteredBoxed{P_{req}=D\Vinfty=\frac{1}{2}\rhoinfty\Vinfty^3SC_{D,0}+\frac{2KW^2}{\rhoinfty\Vinfty S}}
 Graphically, minimum $\frac{P_{req}}{\Vinfty}$ corresponds with minimum $D$ condition.
@@ -924,28 +931,17 @@ $$\hat{f}(\boldx) = \sumlim{i=1}{m}\frac{\alpha_i}{1+\exp\left(-\bm{\beta}-\suml
 $$\phi(a_i)=\tan^{-1}(a_i)$$
 $$\hat{f}(\boldx) = \sumlim{i=1}{m}\alpha_i\tan^{-1}\left(\bm{\beta} + \sumlim{j=1}{p}w_{i,j}x_j\right)$$
 
-\subsection{Optimization Problem Setup and Graphical Analysis}
-This (sub)section contains problems from Aurora's Introduction to Optimum Design
-\begin{itemize}
-\Problem{2.1}
-A 100 by 100 meter lot is available to construct a building. At least 20,000 square meters of total floor space is needed and the maximum allowable height is 21 meters. The area of the parking lot outside must be at least 25 percent of the total floor area. Each story is a fixed height of 3.5 meters, and the cost of the building in millions of dollars is 0.6$h$ + 0.001$A$ where $h$ is the height and $A$ is the area of each floor. Formulate the problem\\
+\subsection{Multidisciplinary Optimization (MDO)}
+Most real problems require optimizing with respect to a variety of disciplines, each imposing their own objectives and constraints. The disciplines often conflict on constraints and requirements, making optimization of the overall system more challenging. The problem setup is largely the same; the big difference is how each subsystem or discipline is analyzed and integrated into the larger set.\\
 
-Before we do the full setup, let's transform some variables. The height of the building and the total area can be expressed in terms of the number of floors as $h = 3.5n,\ A_{total} = nA$. Then the standard form of the problem is:
+There are two main approaches to MDO. The multidisciplinary feasible approach completely segregates the optimizer from the analyzer. In MDF, the optimizer sees only the top level design variables and the responses, while the analyzer connects each subsystem analysis method and provides coupling mechanisms where appropriate. In essence, the optimizer is guiding the overall system towards the goal while the analyzer is keeping each subsystem in check The analyzer may do some form of fixed point iteration or other convergence technique before returning a result to the optimizer. This setup is better suited towards cheap analysis and/or weakly coupled systems.\\
 
-\begin{minipage}{0.45\textwidth}
-	\begin{center}
-		Minimize $0.6(3.5n) + 0.001A$ \\
-		Subject to $3.5n\leq21\ (\implies n\leq6)$,\\
-		$nA\geq20000$, and \\
-		$(1+0.25n)A\leq100^2$\\
-		With $n\in\mathbb{N}$
-	\end{center}
-\end{minipage}
-\begin{minipage}{0.53\textwidth}
-	\includegraphics[width=\textwidth]{Graphics/aurora_p2-1.png}
-\end{minipage}
+The individual discipline feasible approach links each subsystem analyzer directly to the optimizer. The job of the optimizer is to ensure each individual subsystem achieves both optimality and feasibility. Each subsystem analysis method communicates directly with the optimizer, taking in the necessary variables and returning appropriate responses. This setup is better suited to stiff systems, where coupling between analyses can be very strong.\\
 
-\end{itemize}
+There are also asymmetric optimization techniques, which are geared towards problems where one analyzer is significantly slower than any other. A good example is aerostructural optimization, where the aero analysis can be very slow while the structural analysis may be very fast. In that case, the aero analysis can be run only occasionally, and the optimizer can focus on structural optimization for a given set of aero loads. The converged structure, with appropriate deflections, can then be passed to the aero module for reanalysis, then the whole thing loops back. Asymmetric techniques perform better when the coupling is weaker in one direction than in the other, e.g. when small changes in deflection don't affect aerodynamics too much, but changes in loading conditions significantly impact failure criteria.\\
+
+\begin{wrapfigure}{r}{5cm}\centering\includegraphics[width=0.3\textwidth]{Graphics/simple_DSM.PNG}\end{wrapfigure}
+A useful tool for MDO is the design structure matrix (DSM). A DSM provides quick information about feed forwards, feed backs, and couplings between modules. It may be possible to rearrange a DSM to make the overall analysis more efficient, which is typically achieved by attempting to minimize the number of feedbacks. Of course, some feedback loops must remain if there is any direct coupling between two modules.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1831,23 +1827,34 @@ No to both. PFRs ignore axial diffusion, which is a critical component of lamina
 
 Perfectly stirred reactors everywhere except for the (optional) burnout zone. This is based on a handful of papers on models of reacting flow CFD, where the PSR model provides a decent estimate of local conditions for large reactor networks. This type of system is typically very turbulent and is aided by recirculation zones for flame holding. It would be preferable to model the entire rich combustion zone as perfectly stirred because of these conditions, rather than as a premixed fluid simply flowing axially. More accurate models put equivalence ratio distributions over the network within the rich zone to emulate the stratified composition which is seen in fuel injection systems. The quick mix region is simply a dump of air, which will be a very turbulent process and we can simplify the analysis by assuming no reactions; just an instantaneous, perfect mixing of air with the rich products. The lean combustion zone could possibly be modeled as a PFR, unless there was some new fuel injected into the system or a distribution of equivalence ratios was desired, in which case a network of PSRs would be more appropriate. In the burnout zone we can assume all the hot stuff is just flowing through with no real crazy stuff happening, so a plug flow reactor model is fine. (The burnout zone isn't even totally necessary so we could just leave it out.) If a true reactor network is not used -- if the rich and lean combustion zones are modeled only by single reactors -- then the quick mix PSR is unnecessary. The effects of mixing can be achieved by merging the two streams at the inlet of the lean PSR, where the $Da=0$ assumption will take care of the mixing for us.
 
-\Problem{19} Consider the reactor network created for Problem 18 operating with propane as the fuel at 10 atmospheres with each combustion reactor having a volume of 1 $m^3$. The inlet temperature to the rich combustor follows a long-period sinusoid in time, while volumetric flow rate and composition remain constant ($\dot V = 5\ m^3/s$, $\phi=2.5$). The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 0.6 if no fuel burned in the rich zone. Sketch the mole fraction profiles of significant species at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
-$$T_{in}(t) = 1000 + 200\cos(t/10),\quad t\in[0,20\pi]$$
+\Problem{19} Consider the reactor network created for Problem 18 operating with propane as the fuel at 10 atmospheres with each combustion reactor having a volume of 1 $m^3$. The network is operating at a steady state for a long time, with $\dot V = 10\ m^3/s$, $\phi=2.5$, and $T_{in} = 500\ K$, but experiences a sinusoidal fluctation in inlet temperature at time $t=0$, given below. The air at the inlet of the quick mix region is maintained at 1000 Kelvin. Enough air is added such that the equivalence ratio at the inlet of the lean zone would be 1.2 if no fuel burned in the rich zone. Sketch the mole fraction profiles of $H_2O$, $CO_2$, $CO$, and $NO$ at the exit of each combustion zone as a function of time. The temperature profile is given, in Kelvin, as
+$$T_{in}(t) = 800 - 300\cos(t/10),\quad t\in[0,20\pi]$$
+\vspace{-1cm}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{Graphics/T_vs_t.png}
+\end{figure}
 
-Equivalence ratio has very little impact on autoignition delay. The residence time of the rich combustor is 0.2 seconds, which is longer than the autoignition delay of propane at 1200 K. So initially there are rich combustion products coming out of the rich PSR. The exit temperature of the rich PSR will be around 2000 K. If we make the calorically perfect assumption and assuming the mixture specific heat is very close to that of nitrogen, the inlet temperature to the lean PSR will be around 1500 K. The lean mixture will continue to burn (autoignition delay has dropped since temperature has risen) and the outlet of the lean PSR will be lean products at around 2500 K. The mixture will then move towards equilibrium in the burnout zone, where carbon monoxide will form carbon dioxide and release heat, and nitrogen will react with excess oxygen to form nitric oxide at high temperatures via Zeldovich (or Extended Zeldovich). \\
-
-The temperatures downstream will change with the inlet temperature to the rich PSR. The correlation is not 1:1, however, so the temperatures will decrease slightly less than that of the inlet. The rich mixture may not autoignite at the minimum temperature of 800 K but the fact that there was a flame in the reactor before then may prevent quenching (hysteresis). Propane has a decently high activation energy, in the ballpark of 400 kJ/mol (some sources suggest as high as 700 kJ/mol), so this could be an issue. Look at the two cases separately
+Some things to note:
 \begin{itemize}
-\Item{Extinguished} If the first PSR quenches then the whole system breaks down. The rich PSR would spit out a cold mixture almost identical to the inlet -- there may be a few reactions -- which would get mixed with air and then pushed into the lean PSR. The temperature going into the lean PSR would be slightly higher, probably around 900 K, since the incoming air is hot. This may or may not be high enough to ignite in the lean zone. Ignition in the lean combustor could be helped by some radical production inside the rich combustor. Going into the burnout zone, the mixture \emph{might} be able to autoignite. As the temperature at the inlet to the rich PSR goes back up, the lean zone will reignite first since it will be helped by radical production in the rich PSR. This will continue until the rich PSR reaches a temperature at which it can ignite, then regular operation resumes.\\
-\includegraphics[width=0.58\textwidth]{Graphics/RQL_time_axes.PNG}
-\Item{Not Extinguished} If the rich PSR does not quench then the reaction will simply not proceed as far at lower temperatures. The drop in temperature will be more gradual than it would be if it had quenched so it would be unlikely that the lean combustion zone would ever extinguish. Enough radicals and hot(ish) reactants would get pushed into the lean zone to sustain the combustion process. The burnout zone would then be largely unchanged aside from the somewhat reduced temperature. The whole system would then smoothly transition back to the initial conditions as the inlet temperature began to rise again.\\
-\includegraphics[width=0.58\textwidth]{Graphics/RQL_time_axes.PNG}
+\item Equivalence ratio has very little impact on autoignition delay
+\item Residence time in each reactor is 0.1 seconds (100 ms)
+\item Autoignition delays range between nanoseconds at very high temperatures to tenths of seconds at low temperatures
+\item Combustion temperatures for rich propane from 1200 K are around 2000 K
 \end{itemize}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{Graphics/RQL_time_axes.PNG}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{Graphics/RQL_time_axes.PNG}
+\end{figure}
 
-
+\newpage
 \Problem{20}\\
 \begin{minipage}{0.48\textwidth}
-A rigid spherical vessel initially contains ten moles each of hydrogen and oxygen (diatomics) by mole at 700 K and 1 atm. Nitrogen at 1000 K is added to the system at a constant rate of 0.1 mole per second for 100 seconds. Is the vessel ever at risk of exploding?
+A rigid spherical vessel initially contains ten moles each of hydrogen and oxygen (diatomics) by mole at 500 K and 1 atm. Nitrogen at 1000 K is added to the system at a constant rate of 0.1 mole per second for 100 seconds. Is the vessel ever at risk of exploding?
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 \centering
@@ -1866,20 +1873,20 @@ Consider the system to the right. Partitions (1) and (2) are of equal volume ($1
 \end{minipage}
 \begin{enumerate}[label=\alph*)]
 \item Partition (1) is a fixed mass containing premixed hydrogen and oxygen at 1000 K at 10 atm. Partition (2) contains stoichiometric premixed ethane and oxygen at 500 K and 1 atm. Describe how the flame propagates within (2).
-\item Partition (1) initially contains air at 800 K and 1 atm, and a stoichiometric methane-air mixture steadily enters at 800 K with a volumetric flow rate of 10 cubic meters per second. Partition (2) contains a premixed methane-air mixture at 300 K, 10 atm, and $\phi=2$. Draw the mole fractions of $H_2O$ and $CO_2$ within \emph{the entire system} as a function of time.
+\item Partition (1) initially contains air at 300 K and 1 atm, and a stoichiometric methane-air mixture steadily enters at 900 K with a volumetric flow rate of 10 cubic meters per second. Partition (2) contains a premixed methane-air mixture at 300 K, 10 atm, and $\phi=2$. Draw the mole fractions of $H_2O$ and $CO_2$ within \emph{the entire system} as a function of time.
 \item Partition (1) contains argon at 2000 K and 5 atm. Partition (2) contains stoichiometric methane-air at 1000 K and 10 atm. Sketch the temperature of partition (2) and the entropy of the system versus time.
 \item Partition (1) initially contains nitrogen at 1000 K and 5 atm. Separate streams of carbon monoxide and oxygen steadily enter partition (1) at 0.1 and 0.05 cubic meters per second, respectively. Both inlets are at 1000 K. Partition (2) contains 1 mole each of hydrogen, oxygen, and nitrogen at 300 K and 1 atm. Sketch the $NO$ concentration of each partition versus time.
 \end{enumerate}
-
+\newpage
 \Problem{22} A stoichiometric ethane-air mixture at 298 K and 1 atm flows over a heated triangle in the two configurations shown below. Draw and compare the flames for each configuration with $u_1 = 2\ m/s$ and $u_1 = 10\ m/s$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Graphics/triangle_flows.PNG}
 \end{figure}
 
-\Problem{23} There are three rectangular ducts: The core duct, at the center, carries rich ethane/air at 500 K and has a length of 0.75 meters; the middle duct carries pure air at 500 K and has a length of 1.5 meters; and the outer duct carries pure ethane at 500 K and has a length of 3 meters. The system is maintained at 1 atmosphere. A hot wire sits inside the core slot at $x=0.5m$. The core velocity $u_1$ is 2.5 meters per second, and the velocities $u_2$ and $u_3$ are such that the volumetric flow rates of each annulus, per unit depth, are equal. Draw the flame(s).
+\Problem{23} There are three rectangular ducts: The core duct, at the center, carries rich ethane/air at 300 K and has a length of 0.75 meters; the middle duct carries pure air at 300 K and has a length of 1.5 meters; and the outer duct carries pure ethane at 300 K and has a length of 3 meters. The system is maintained at 1 atmosphere. A hot wire sits inside the core slot at $x=0.5m$. The core velocity $u_1$ is 2.5 meters per second, and the velocities $u_2$ and $u_3$ are such that the volumetric flow rates of each annulus, per unit depth, are equal. Draw the flame(s).
 
-\begin{figure}[h]\centering\includegraphics[width=0.8\textwidth]{Graphics/annular_premixed_burner.PNG}\end{figure}
+\begin{figure}[h]\centering\includegraphics[width=0.8\textwidth]{Graphics/multi_slot_burner.PNG}\end{figure}
 
 
 \end{itemize}
