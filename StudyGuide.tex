@@ -496,13 +496,13 @@ where $p_e$ is the pressure at the exit, $p_\infty$ is the atmospheric pressure,
 	\Item{Fan Pressure Ratio} Ratio of stagnation pressure before and after the fan
 	\Item{Pressure Recovery} Percent of pressure which is retained for useful work. Inlet pressure recovery typically around 90\% while burner pressure recovery is closer to 95\%, though the pressure in the burner is much higher so the losses are greater in magnitude
 	\end{itemize}
-\Item{Variations for High BPR Turbofans}
+\Item{TSFC Variations for High BPR Turbofans}
 	\begin{itemize}
 	\Item{Typical Value} About 0.6 pounds per horsepower per hour (almost half that of turbojets)
 	\Item{With Velocity} Thrust decreases strongly with velocity, though it is about constant for cruise conditions. TSFC increases with velocity
 	\Item{With Altitude} Thrust decreases with altitude for the same reason as turbojets (lower density). TSFC is approximately constant with altitude
 	\end{itemize}
-\Item{Variations for Low BPR Turbofans}
+\Item{TSFC Variations for Low BPR Turbofans}
 	\begin{itemize}
 	\Item{Typical Value} Closely resembles turbojets, so expect 0.8-0.9 pounds per horsepower per hour
 	\Item{With Velocity} Both thrust and TSFC increase with speed
@@ -563,7 +563,7 @@ Useful note from MIT document: It can be useful to assume the net distributed lo
 $$q(y)=Kc(y)$$
 $$\intlim{-b/2}{b/2}Kc(y)dy = \intlim{-b/2}{b/2}(L'(y)-m'(y))dy$$
 $$KS_W = L-m_{wing}$$
-$$K = \frac{L-m_{wing}}{S_W} \approx \frac{m_{fuselage}}{S_W}$$
+$$K = \frac{L-m_{wing}}{S_W}$$
 \subsubsection{V-n Diagram}
 The $V$-$n$ diagram shows the relationship between the load factor and speed of an aircraft. It shows the operational envelope -- the values of $V$ and $n$ which are simultaneously feasible. The common choice for $V$ is the equivalent airspeed, which is selected to make the $V$-$n$ diagram altitude-independent. The equivalent airspeed is defined as the airspeed at sea level for which the same lift force is generated (and thus the load factor is the same).
 $$V_{EAS} = V(\rho_0)\big|_{L_0=L}$$
@@ -593,10 +593,20 @@ Definition: Control is the ability of a system to move between states/conditions
 \begin{itemize}
 \Item{Stable} A system is stable if any small perturbations from an equilibrium state die out with time, restoring the system to the equilibrium state
 \Item{Unstable} A system is unstable if any small perturbations from an equilibrium state oscillates around or diverges from the equilibrium state
-\Item{Neutral} A system is neutrally stable if disturbances neither grow nor die out with time (e.g. perfect harmonic motion)
-\Item{Static Stability} A system is statically stable if its initial response to a disturbance pushes it back towards its initial state (over damped stability)
-\Item{Dynamic Stability} A system is dynamically stable if disturbances oscillate about the equilibrium state but decay in magnitude with time (under damped stability). Most dynamically stable systems are also statically stable (i.e. the initial response is back towards equilibrium, it just overshoots and comes back repeatedly)
+\Item{Neutral} A system is neutrally stable if disturbances neither grow nor die out with time (e.g. step response)
+\Item{Static Stability} A system is statically stable if its initial response to a disturbance pushes it back towards its initial state
+\Item{Dynamic Stability} A system is dynamically stable if disturbances oscillate about the equilibrium state but decay in magnitude with time. Most dynamically stable systems are also statically stable (i.e. the initial response is back towards equilibrium, it just overshoots and comes back repeatedly)
 \end{itemize}
+
+\begin{minipage}{0.38\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{Graphics/static_stability.PNG}
+\end{minipage}
+\begin{minipage}{0.58\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{Graphics/dynamic_stability.png}
+\end{minipage}
+
 
 A ball in a valley is stable, a ball on top of a hill is unstable. A frictionless pendulum is statically stable and dynamically neutral; a pendulum with friction is statically and dynamically stable; an inverted pendulum is statically unstable (can't even talk about dynamic properties for this case).
 \subsubsection{Stability Derivatives}
@@ -608,9 +618,7 @@ Note that wing span is used as the reference length for the roll and yaw moments
 
 \subsubsection{General Stability}
 A vehicle will be stable if it is able to damp out disturbances and deviations from steady level flight. That is, a change in angle of attack $\alpha$, side slip angle $\beta$, or roll angle $\phi$ should decay with time, per our definition of stability. This requires the vehicle must provide restoring moments when exposed to the aforementioned deviations. Since the moments depend on the angles themselves, we can express this via partial derivatives
-$$\Partial{C_m}{\alpha}<0$$
-$$\Partial{C_n}{\beta}>0$$
-$$\Partial{C_l}{\phi}<0$$
+$$\Partial{C_m}{\alpha}<0\qquad\Partial{C_n}{\beta}>0\qquad\Partial{C_l}{\phi}<0$$
 
 \subsubsection{Static Margin}
 The static margin is the distance between the center of gravity of the aircraft and its neutral point (the point where neutral stability is achieved), typically expressed as a percentage of the mean aerodynamic chord. Mathematically, the static margin represents the (negative of the) derivative of the pitching moment coefficient with respect to the lift coefficient. 
