@@ -978,7 +978,7 @@ $$\Partial{}{y}\Partial{z}{x} = \Partial{}{x}\Partial{z}{y}$$
 \subsubsection{The State Postulate}
 \large\emph{The number of independent, intensive thermodynamic properties of a specified substance is equal to the number of relevant reversible work modes plus one. In the case of a simple compressible substance, two independent intensive properties are needed to completely define the thermodynamic state.}\\\normalsize
 
-\textbf{Definition:} A simple substance is one for which there is only one reversible work mode. A simple compressible substance is one where that reversible work mode is fluid compression.\\
+\textbf{Definition:} A simple substance is one for which there is only one reversible work mode. A simple compressible substance is one where that reversible work mode is fluid compression ($pdV$ work).\\
 
 \textbf{Definition:} A reversible work mode is one where the the force is independent of direction and rate of change. The former implies the work done by a force $F$ in the direction $+dx$ is equal in magnitude to the work done by the same force in the direction $-dx$. Reversible work can be accounted for by reversible work plus heat transfer.\\
 
@@ -991,7 +991,7 @@ $$\Partial{}{y}\Partial{z}{x} = \Partial{}{x}\Partial{z}{y}$$
 
 \subsubsection{The Second Law of Thermodynamics}
 \large\emph{There exists a state variable $S$ which can be produced but cannot be destroyed}
-\CenteredBoxed{S_2-S_1=\Delta S \geq 0}
+\CenteredBoxed{dS = \frac{\delta Q}{T} + \delta S_{gen} \geq 0}
 \normalsize
 
 \textbf{Thermodynamic Definition of Temperature:}
@@ -1875,14 +1875,19 @@ Some things to note:
 \newpage
 \Problem{20}\\
 \begin{minipage}{0.48\textwidth}
-A rigid spherical vessel initially contains ten moles each of hydrogen and oxygen (diatomics) by mole at 500 K and 1 atm. Nitrogen at 1000 K is added to the system at a constant rate of 0.1 mole per second for 100 seconds. Is the vessel ever at risk of exploding?
+A rigid spherical vessel initially contains air at 300 K and 1 atm. A leak develops which allows hydrogen to enter the vesse at a constant molar rate. Is the vessel ever at risk of exploding? If so, what can be done to prevent the mixture from exploding? What if the temperature of the air were raised to 500 K?(Graph is from \emph{Explosion Limits of Hydrogen/Oxygen Mixtures at Initial Pressures up to 200 bar} by Schr{\"o}der, Emonts, Janssen, and Schulze. 2004.)
 \end{minipage}
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=0.7\textwidth]{Graphics/spherical_H2-O2.PNG}
+\includegraphics[width=0.7\textwidth]{Graphics/spherical_H2-air.PNG}
 \end{minipage}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Graphics/H2-air_explosions.PNG}
+\end{figure}
 
+What if the problem were inverted? That is, what would happen if a hydrogen storage tank developed a leak which allowed air into the vessel? 
 
 \Problem{21} \\
 \begin{minipage}{0.46\textwidth}
@@ -1898,7 +1903,7 @@ Consider the system to the right. Partitions (1) and (2) are of equal volume ($1
 \item Partition (1) contains argon at 2000 K and 5 atm. Partition (2) contains stoichiometric methane-air at 1000 K and 10 atm. Sketch the temperature of partition (2) and the entropy of the system versus time.
 \item Partition (1) initially contains nitrogen at 1000 K and 5 atm. Separate streams of carbon monoxide and oxygen steadily enter partition (1) at 0.1 and 0.05 cubic meters per second, respectively. Both inlets are at 1000 K. Partition (2) contains 1 mole each of hydrogen, oxygen, and nitrogen at 300 K and 1 atm. Sketch the $NO$ concentration of each partition versus time.
 \end{enumerate}
-\newpage
+
 \Problem{22} A stoichiometric ethane-air mixture at 298 K and 1 atm flows over a heated triangle in the two configurations shown below. Draw and compare the flames for each configuration with $u_1 = 2\ m/s$ and $u_1 = 10\ m/s$.
 \begin{figure}[h]
 \centering
@@ -1909,6 +1914,7 @@ Consider the system to the right. Partitions (1) and (2) are of equal volume ($1
 
 \begin{figure}[h]\centering\includegraphics[width=0.8\textwidth]{Graphics/multi_slot_burner.PNG}\end{figure}
 
+\Problem{24} 
 
 \end{itemize}
 
